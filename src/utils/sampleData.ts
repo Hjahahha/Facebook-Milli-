@@ -185,6 +185,30 @@ export const sampleProducts: Product[] = [
     description: 'ماكينة قهوة DeLonghi الأوتوماتيكية مع مطحنة مدمجة وخاصية تبخير الحليب.',
     merchantId: 'm2', merchantName: 'بيت الأدوات', rating: 4.5, reviewCount: 142, inStock: true, createdAt: '2024-03-22',
   },
+  {
+    id: 'p17', name: 'ساعة Apple Watch Ultra 2', price: 1200000, originalPrice: 1450000, discount: 17,
+    image: 'https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=300', category: 'electronics', subcategory: 'phones',
+    description: 'ساعة Apple Watch Ultra 2 مع هيكل تيتانيوم وشاشة Always-On. مقاومة للماء حتى 100 متر.',
+    merchantId: 'm1', merchantName: 'متجر الإلكترونيات', rating: 4.9, reviewCount: 167, inStock: true, featured: true, createdAt: '2024-03-25',
+  },
+  {
+    id: 'p18', name: 'حقيبة يد جلدية فاخرة', price: 95000, originalPrice: 140000, discount: 32,
+    image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=300', category: 'fashion', subcategory: 'bags',
+    description: 'حقيبة يد نسائية من الجلد الطبيعي بتصميم كلاسيكي أنيق. مناسبة للاستخدام اليومي والمناسبات.',
+    merchantId: 'm5', merchantName: 'أزياء العراق', rating: 4.6, reviewCount: 89, inStock: true, createdAt: '2024-03-28',
+  },
+  {
+    id: 'p19', name: 'مكبر صوت JBL Charge 5', price: 165000, originalPrice: 210000, discount: 21,
+    image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=300', category: 'electronics', subcategory: 'phones',
+    description: 'مكبر صوت محمول JBL Charge 5 مقاوم للماء مع بطارية تدوم 20 ساعة.',
+    merchantId: 'm1', merchantName: 'متجر الإلكترونيات', rating: 4.7, reviewCount: 234, inStock: true, createdAt: '2024-04-01',
+  },
+  {
+    id: 'p20', name: 'طقم أواني طبخ ستانلس ستيل 12 قطعة', price: 145000, originalPrice: 200000, discount: 27,
+    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300', category: 'home', subcategory: 'kitchen',
+    description: 'طقم أواني طبخ من الستانلس ستيل المقاوم للصدأ. 12 قطعة متنوعة تشمل القدور والمقالي.',
+    merchantId: 'm2', merchantName: 'بيت الأدوات', rating: 4.4, reviewCount: 76, inStock: true, createdAt: '2024-04-05',
+  },
 ];
 
 export const sampleAds: Ad[] = [

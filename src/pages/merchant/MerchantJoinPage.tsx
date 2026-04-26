@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../store/AppContext';
-import { ArrowRight, Crown, Star, Check, Zap } from 'lucide-react';
+import { ArrowRight, Crown, Star, Check, Zap, Sparkles, Shield, Store } from 'lucide-react';
 import { generateId, sendWhatsAppNotification } from '../../utils/helpers';
 
 export default function MerchantJoinPage() {
@@ -9,6 +9,7 @@ export default function MerchantJoinPage() {
   const { state, dispatch } = useApp();
   const [selectedTier, setSelectedTier] = useState<'standard' | 'premium'>('premium');
   const [step, setStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     businessName: '', businessType: '', businessAddress: '', businessDescription: '',
     nationalId: '', city: '',
@@ -43,72 +44,104 @@ export default function MerchantJoinPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!state.user) { navigate('/login'); return; }
+    setIsSubmitting(true);
 
-    const application = {
-      id: generateId(),
-      userId: state.user.id,
-      userName: state.user.name,
-      userPhone: state.user.phone,
-      businessName: form.businessName,
-      businessType: form.businessType,
-      businessAddress: form.businessAddress,
-      businessDescription: form.businessDescription,
-      tier: selectedTier,
-      documents: [],
-      status: 'pending' as const,
-      createdAt: new Date().toISOString(),
-      nationalId: form.nationalId,
-      city: form.city,
-    };
+    setTimeout(() => {
+      const application = {
+        id: generateId(),
+        userId: state.user!.id,
+        userName: state.user!.name,
+        userPhone: state.user!.phone,
+        businessName: form.businessName,
+        businessType: form.businessType,
+        businessAddress: form.businessAddress,
+        businessDescription: form.businessDescription,
+        tier: selectedTier,
+        documents: [],
+        status: 'pending' as const,
+        createdAt: new Date().toISOString(),
+        nationalId: form.nationalId,
+        city: form.city,
+      };
 
-    dispatch({ type: 'SUBMIT_MERCHANT_APPLICATION', payload: application });
-    dispatch({ type: 'ADD_NOTIFICATION', payload: {
-      id: generateId(), title: 'طلب انضمام تاجر', message: `تم تقديم طلبك للانضمام كتاجر ${selectedTier === 'premium' ? 'مميز' : 'عادي'}. سيتم مراجعة طلبك خلال 24 ساعة.`, type: 'merchant', read: false, createdAt: new Date().toISOString(),
-    }});
+      dispatch({ type: 'SUBMIT_MERCHANT_APPLICATION', payload: application });
+      dispatch({ type: 'ADD_NOTIFICATION', payload: {
+        id: generateId(), title: 'طلب انضمام تاجر', message: `تم تقديم طلبك للانضمام كتاجر ${selectedTier === 'premium' ? 'مميز' : 'عادي'}. سيتم مراجعة طلبك خلال 24 ساعة.`, type: 'merchant', read: false, createdAt: new Date().toISOString(),
+      }});
 
-    sendWhatsAppNotification(form.businessName, selectedTier, state.user.phone);
-    navigate('/merchant-success');
+      sendWhatsAppNotification(form.businessName, selectedTier, state.user!.phone);
+      navigate('/merchant-success');
+    }, 800);
   };
 
+  const inputClass = "w-full h-14 bg-gray-50 rounded-2xl px-4 text-sm text-right outline-none border-2 border-gray-100 focus:border-red-400 focus:ring-4 focus:ring-red-50 focus:bg-white transition-all duration-300";
+
   return (
-    <div className="min-h-screen bg-gray-50 animate-fade-in pb-10">
-      <div className="bg-white px-4 py-3 flex items-center justify-between border-b sticky top-0 z-10">
-        <div />
-        <h1 className="text-lg font-bold">انضم كتاجر</h1>
-        <button onClick={() => navigate(-1)}><ArrowRight size={24} className="text-gray-600" /></button>
+    <div className="min-h-screen bg-gray-50/50 animate-fade-in pb-10">
+      <div className="glass sticky top-0 z-10 px-4 py-3 flex items-center justify-between border-b border-gray-100/50">
+        <div className="w-10" />
+        <h1 className="text-lg font-extrabold text-gray-900">انضم كتاجر</h1>
+        <button onClick={() => navigate(-1)} className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-all btn-press">
+          <ArrowRight size={20} className="text-gray-600" />
+        </button>
+      </div>
+
+      {/* Step Indicator */}
+      <div className="px-8 pt-5">
+        <div className="flex items-center gap-3 justify-center">
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold ${step >= 2 ? 'bg-emerald-100 text-emerald-700' : step === 1 ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-500'}`}>
+            <span>اختر الباقة</span>
+            {step >= 2 ? <Check size={14} /> : <span className="w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center text-[10px]">1</span>}
+          </div>
+          <div className="w-8 h-0.5 bg-gray-200" />
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold ${step === 2 ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-500'}`}>
+            <span>المعلومات</span>
+            <span className="w-5 h-5 bg-gray-300 text-white rounded-full flex items-center justify-center text-[10px]">2</span>
+          </div>
+        </div>
       </div>
 
       {step === 1 && (
         <div className="px-4 pt-6">
-          <div className="text-center mb-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-2">اختر خطتك</h2>
-            <p className="text-sm text-gray-500">ابدأ رحلتك التجارية معنا</p>
+          <div className="text-center mb-6 animate-fade-in-up">
+            <div className="w-16 h-16 bg-gradient-to-br from-red-100 to-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-premium">
+              <Store size={28} className="text-red-600" />
+            </div>
+            <h2 className="text-xl font-black text-gray-900 mb-2">ابدأ رحلتك التجارية</h2>
+            <p className="text-sm text-gray-400 font-medium">اختر الباقة المناسبة لعملك</p>
           </div>
 
           {/* Standard Tier */}
           <div
             onClick={() => setSelectedTier('standard')}
-            className={`rounded-2xl p-5 mb-4 cursor-pointer transition-all border-2 ${
-              selectedTier === 'standard' ? 'border-red-500 bg-red-50 shadow-md' : 'border-gray-200 bg-white'
+            className={`rounded-2xl p-5 mb-4 cursor-pointer transition-all duration-300 border-2 animate-fade-in-up card-hover ${
+              selectedTier === 'standard' ? 'border-red-400 bg-red-50/50 shadow-premium-lg' : 'border-gray-100 bg-white shadow-premium'
             }`}
           >
             <div className="flex items-center justify-between mb-4">
-              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${selectedTier === 'standard' ? 'border-red-500 bg-red-500' : 'border-gray-300'}`}>
+              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${selectedTier === 'standard' ? 'border-red-500 bg-red-500' : 'border-gray-300'}`}>
                 {selectedTier === 'standard' && <Check size={14} className="text-white" />}
               </div>
-              <div className="flex items-center gap-2">
-                <div>
-                  <h3 className="text-lg font-bold text-gray-800">الباقة العادية</h3>
-                  <p className="text-2xl font-bold text-red-600">25,000 <span className="text-sm font-normal">دينار/شهر</span></p>
+              <div className="flex items-center gap-3">
+                <div className="text-right">
+                  <h3 className="text-lg font-extrabold text-gray-900">الباقة العادية</h3>
+                  <div className="flex items-center gap-1 justify-end">
+                    <span className="text-[10px] text-gray-400">/شهر</span>
+                    <span className="text-2xl font-black text-red-600">25,000</span>
+                  </div>
                 </div>
-                <Star size={28} className="text-gray-400" />
+                <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center">
+                  <Star size={24} className="text-gray-400" />
+                </div>
               </div>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {standardFeatures.map((f, i) => (
-                <div key={i} className="flex items-center gap-2 justify-end text-sm text-gray-600">
-                  <span>{f}</span>
-                  <Check size={14} className="text-green-500 shrink-0" />
+                <div key={i} className="flex items-center gap-2.5 justify-end text-sm text-gray-600">
+                  <span className="font-medium">{f}</span>
+                  <div className="w-5 h-5 bg-emerald-100 rounded-full flex items-center justify-center shrink-0">
+                    <Check size={10} className="text-emerald-600" />
+                  </div>
                 </div>
               ))}
             </div>
@@ -117,55 +150,71 @@ export default function MerchantJoinPage() {
           {/* Premium Tier */}
           <div
             onClick={() => setSelectedTier('premium')}
-            className={`rounded-2xl p-5 mb-6 cursor-pointer transition-all border-2 relative overflow-hidden ${
-              selectedTier === 'premium' ? 'border-yellow-500 bg-yellow-50 shadow-lg' : 'border-gray-200 bg-white'
+            className={`rounded-2xl p-5 mb-6 cursor-pointer transition-all duration-300 border-2 relative overflow-hidden animate-fade-in-up card-hover ${
+              selectedTier === 'premium' ? 'border-amber-400 bg-amber-50/50 shadow-premium-lg' : 'border-gray-100 bg-white shadow-premium'
             }`}
           >
-            <div className="absolute top-0 left-0 bg-yellow-500 text-white text-[10px] font-bold px-3 py-1 rounded-br-xl">
-              الأكثر شعبية
+            <div className="absolute top-0 left-0 bg-gradient-to-r from-amber-500 to-yellow-500 text-white text-[10px] font-bold px-4 py-1.5 rounded-br-xl flex items-center gap-1 shadow-lg">
+              <Sparkles size={10} />
+              <span>الأكثر شعبية</span>
             </div>
-            <div className="flex items-center justify-between mb-4">
-              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${selectedTier === 'premium' ? 'border-yellow-500 bg-yellow-500' : 'border-gray-300'}`}>
+            <div className="flex items-center justify-between mb-4 mt-2">
+              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${selectedTier === 'premium' ? 'border-amber-500 bg-amber-500' : 'border-gray-300'}`}>
                 {selectedTier === 'premium' && <Check size={14} className="text-white" />}
               </div>
-              <div className="flex items-center gap-2">
-                <div>
-                  <h3 className="text-lg font-bold text-gray-800">الباقة المميزة</h3>
-                  <p className="text-2xl font-bold text-yellow-600">99,000 <span className="text-sm font-normal">دينار/شهر</span></p>
+              <div className="flex items-center gap-3">
+                <div className="text-right">
+                  <h3 className="text-lg font-extrabold text-gray-900">الباقة المميزة</h3>
+                  <div className="flex items-center gap-1 justify-end">
+                    <span className="text-[10px] text-gray-400">/شهر</span>
+                    <span className="text-2xl font-black text-amber-600">99,000</span>
+                  </div>
                 </div>
-                <Crown size={28} className="text-yellow-500 fill-yellow-500" />
+                <div className="w-12 h-12 bg-gradient-to-br from-amber-100 to-yellow-100 rounded-xl flex items-center justify-center shadow-sm">
+                  <Crown size={24} className="text-amber-500 fill-amber-500" />
+                </div>
               </div>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2.5 max-h-64 overflow-y-auto">
               {premiumFeatures.map((f, i) => (
-                <div key={i} className="flex items-center gap-2 justify-end text-sm text-gray-600">
-                  <span>{f}</span>
-                  <Zap size={14} className="text-yellow-500 shrink-0" />
+                <div key={i} className="flex items-center gap-2.5 justify-end text-sm text-gray-600">
+                  <span className="font-medium">{f}</span>
+                  <div className="w-5 h-5 bg-amber-100 rounded-full flex items-center justify-center shrink-0">
+                    <Zap size={10} className="text-amber-600" />
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <button onClick={() => setStep(2)} className="w-full gradient-primary text-white py-4 rounded-xl font-bold text-base">
-            متابعة - {selectedTier === 'premium' ? '99,000' : '25,000'} دينار
+          <button onClick={() => setStep(2)} className="w-full gradient-primary text-white py-4 rounded-2xl font-bold text-base shadow-glow-red btn-press flex items-center justify-center gap-2">
+            <span>متابعة - {selectedTier === 'premium' ? '99,000' : '25,000'} دينار</span>
+            <ArrowRight size={18} className="rotate-180" />
           </button>
         </div>
       )}
 
       {step === 2 && (
-        <form onSubmit={handleSubmit} className="px-4 pt-6 space-y-4">
-          <div className="bg-white rounded-xl p-4 border border-gray-200 mb-4">
-            <h3 className="text-base font-bold text-gray-800 mb-1 text-right">معلومات النشاط التجاري</h3>
-            <p className="text-xs text-gray-500 text-right">أكمل المعلومات التالية لتقديم طلب الانضمام</p>
+        <form onSubmit={handleSubmit} className="px-4 pt-6 space-y-4 animate-slide-up">
+          <div className="bg-white rounded-2xl p-4 border border-gray-100/80 shadow-premium mb-4">
+            <div className="flex items-center gap-3 justify-end">
+              <div>
+                <h3 className="text-base font-extrabold text-gray-900">معلومات النشاط التجاري</h3>
+                <p className="text-xs text-gray-400 font-medium">أكمل المعلومات التالية لتقديم طلب الانضمام</p>
+              </div>
+              <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center">
+                <Shield size={18} className="text-red-600" />
+              </div>
+            </div>
           </div>
 
           <div>
-            <label className="text-xs text-gray-500 block text-right mb-1">اسم النشاط التجاري *</label>
-            <input required value={form.businessName} onChange={e => setForm({ ...form, businessName: e.target.value })} className="w-full h-14 bg-gray-50 rounded-xl px-4 text-sm text-right outline-none border border-gray-200 focus:border-red-400" placeholder="مثال: متجر الإلكترونيات" />
+            <label className="text-xs text-gray-500 font-semibold block text-right mb-1.5">اسم النشاط التجاري *</label>
+            <input required value={form.businessName} onChange={e => setForm({ ...form, businessName: e.target.value })} className={inputClass} placeholder="مثال: متجر الإلكترونيات" />
           </div>
           <div>
-            <label className="text-xs text-gray-500 block text-right mb-1">نوع النشاط *</label>
-            <select required value={form.businessType} onChange={e => setForm({ ...form, businessType: e.target.value })} className="w-full h-14 bg-gray-50 rounded-xl px-4 text-sm text-right outline-none border border-gray-200 focus:border-red-400">
+            <label className="text-xs text-gray-500 font-semibold block text-right mb-1.5">نوع النشاط *</label>
+            <select required value={form.businessType} onChange={e => setForm({ ...form, businessType: e.target.value })} className={inputClass}>
               <option value="">اختر نوع النشاط</option>
               <option value="electronics">إلكترونيات</option>
               <option value="fashion">ملابس وأزياء</option>
@@ -179,8 +228,8 @@ export default function MerchantJoinPage() {
             </select>
           </div>
           <div>
-            <label className="text-xs text-gray-500 block text-right mb-1">المدينة *</label>
-            <select required value={form.city} onChange={e => setForm({ ...form, city: e.target.value })} className="w-full h-14 bg-gray-50 rounded-xl px-4 text-sm text-right outline-none border border-gray-200 focus:border-red-400">
+            <label className="text-xs text-gray-500 font-semibold block text-right mb-1.5">المدينة *</label>
+            <select required value={form.city} onChange={e => setForm({ ...form, city: e.target.value })} className={inputClass}>
               <option value="">اختر المدينة</option>
               <option value="baghdad">بغداد</option>
               <option value="basra">البصرة</option>
@@ -195,24 +244,28 @@ export default function MerchantJoinPage() {
             </select>
           </div>
           <div>
-            <label className="text-xs text-gray-500 block text-right mb-1">عنوان المحل *</label>
-            <input required value={form.businessAddress} onChange={e => setForm({ ...form, businessAddress: e.target.value })} className="w-full h-14 bg-gray-50 rounded-xl px-4 text-sm text-right outline-none border border-gray-200 focus:border-red-400" placeholder="العنوان التفصيلي" />
+            <label className="text-xs text-gray-500 font-semibold block text-right mb-1.5">عنوان المحل *</label>
+            <input required value={form.businessAddress} onChange={e => setForm({ ...form, businessAddress: e.target.value })} className={inputClass} placeholder="العنوان التفصيلي" />
           </div>
           <div>
-            <label className="text-xs text-gray-500 block text-right mb-1">رقم الهوية الوطنية *</label>
-            <input required value={form.nationalId} onChange={e => setForm({ ...form, nationalId: e.target.value })} className="w-full h-14 bg-gray-50 rounded-xl px-4 text-sm text-right outline-none border border-gray-200 focus:border-red-400" placeholder="رقم الهوية" />
+            <label className="text-xs text-gray-500 font-semibold block text-right mb-1.5">رقم الهوية الوطنية *</label>
+            <input required value={form.nationalId} onChange={e => setForm({ ...form, nationalId: e.target.value })} className={inputClass} placeholder="رقم الهوية" />
           </div>
           <div>
-            <label className="text-xs text-gray-500 block text-right mb-1">وصف النشاط *</label>
-            <textarea required value={form.businessDescription} onChange={e => setForm({ ...form, businessDescription: e.target.value })} className="w-full h-28 bg-gray-50 rounded-xl p-4 text-sm text-right outline-none border border-gray-200 focus:border-red-400 resize-none" placeholder="صف نشاطك التجاري..." />
+            <label className="text-xs text-gray-500 font-semibold block text-right mb-1.5">وصف النشاط *</label>
+            <textarea required value={form.businessDescription} onChange={e => setForm({ ...form, businessDescription: e.target.value })} className="w-full h-28 bg-gray-50 rounded-2xl p-4 text-sm text-right outline-none border-2 border-gray-100 focus:border-red-400 focus:ring-4 focus:ring-red-50 focus:bg-white transition-all duration-300 resize-none" placeholder="صف نشاطك التجاري..." />
           </div>
 
-          <div className="flex gap-3">
-            <button type="button" onClick={() => setStep(1)} className="flex-1 bg-gray-100 text-gray-700 py-4 rounded-xl font-bold">
+          <div className="flex gap-3 pt-2">
+            <button type="button" onClick={() => setStep(1)} className="flex-1 bg-gray-100 text-gray-700 py-4 rounded-2xl font-bold hover:bg-gray-200 transition-all btn-press">
               رجوع
             </button>
-            <button type="submit" className="flex-1 gradient-primary text-white py-4 rounded-xl font-bold">
-              تقديم الطلب
+            <button type="submit" disabled={isSubmitting} className="flex-1 gradient-primary text-white py-4 rounded-2xl font-bold shadow-glow-red btn-press disabled:opacity-60 flex items-center justify-center gap-2">
+              {isSubmitting ? (
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : (
+                'تقديم الطلب'
+              )}
             </button>
           </div>
         </form>

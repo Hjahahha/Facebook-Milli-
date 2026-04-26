@@ -1,5 +1,5 @@
 import { useApp } from '../store/AppContext';
-import { ArrowRight, Minus, Plus, Trash2, ShoppingBag } from 'lucide-react';
+import { ArrowRight, Minus, Plus, Trash2, ShoppingBag, Truck, Shield, Tag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { formatPrice, generateId } from '../utils/helpers';
 
@@ -30,42 +30,67 @@ export default function CartPage() {
   };
 
   return (
-    <div className="pb-20 animate-fade-in">
-      <div className="bg-white px-4 py-3 flex items-center justify-between border-b sticky top-0 z-10">
-        <div className="w-8" />
-        <h1 className="text-lg font-bold text-gray-800">عربتي ({state.cart.length})</h1>
-        <button onClick={() => navigate(-1)}><ArrowRight size={24} className="text-gray-600" /></button>
+    <div className="pb-24 animate-fade-in bg-gray-50/50 min-h-screen">
+      {/* Header */}
+      <div className="glass sticky top-0 z-10 px-4 py-3 flex items-center justify-between border-b border-gray-100/50">
+        <div className="w-10" />
+        <h1 className="text-lg font-extrabold text-gray-900">عربتي ({state.cart.length})</h1>
+        <button onClick={() => navigate(-1)} className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-all btn-press">
+          <ArrowRight size={20} className="text-gray-600" />
+        </button>
       </div>
 
       {state.cart.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 px-4">
-          <ShoppingBag size={80} className="text-gray-200 mb-4" />
-          <p className="text-gray-400 text-lg font-semibold mb-2">عربتك فارغة</p>
+        <div className="flex flex-col items-center justify-center py-20 px-4 animate-fade-in-up">
+          <div className="w-24 h-24 bg-gray-100 rounded-3xl flex items-center justify-center mb-6">
+            <ShoppingBag size={48} className="text-gray-300" />
+          </div>
+          <p className="text-gray-600 text-lg font-bold mb-2">عربتك فارغة</p>
           <p className="text-gray-400 text-sm mb-6">أضف منتجات للمتابعة</p>
-          <button onClick={() => navigate('/')} className="gradient-primary text-white px-8 py-3 rounded-xl font-semibold">
+          <button onClick={() => navigate('/')} className="gradient-primary text-white px-8 py-3.5 rounded-2xl font-bold shadow-glow-red btn-press">
             تصفح المنتجات
           </button>
         </div>
       ) : (
         <>
-          <div className="px-4 mt-4 space-y-3">
+          {/* Free Shipping Banner */}
+          <div className="mx-4 mt-4 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-2.5 flex items-center gap-2 justify-end animate-slide-down">
+            <span className="text-xs font-semibold text-emerald-700">التوصيل مجاني لجميع الطلبات!</span>
+            <Truck size={16} className="text-emerald-600" />
+          </div>
+
+          <div className="px-4 mt-4 space-y-3 stagger-children">
             {state.cart.map(item => (
-              <div key={item.product.id} className="bg-white rounded-xl p-3 shadow-sm flex gap-3 border border-gray-100">
-                <img src={item.product.image} alt={item.product.name} className="w-20 h-20 rounded-lg object-cover" />
-                <div className="flex-1">
-                  <h3 className="text-sm font-semibold text-gray-800 line-clamp-2">{item.product.name}</h3>
-                  <p className="text-red-600 font-bold text-sm mt-1">{formatPrice(item.product.price)}</p>
-                  <div className="flex items-center justify-between mt-2">
-                    <button onClick={() => dispatch({ type: 'REMOVE_FROM_CART', payload: item.product.id })} className="text-red-400">
-                      <Trash2 size={16} />
+              <div key={item.product.id} className="bg-white rounded-2xl p-3.5 shadow-premium flex gap-3 border border-gray-100/80 animate-fade-in-up card-hover">
+                <div className="relative overflow-hidden rounded-xl">
+                  <img src={item.product.image} alt={item.product.name} className="w-20 h-20 object-cover" />
+                  {item.product.discount && (
+                    <span className="absolute top-1 left-1 bg-red-600 text-white text-[8px] px-1.5 py-0.5 rounded font-bold">-{item.product.discount}%</span>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-sm font-bold text-gray-800 line-clamp-2 leading-relaxed">{item.product.name}</h3>
+                  <p className="text-red-600 font-extrabold text-sm mt-1">{formatPrice(item.product.price)}</p>
+                  <div className="flex items-center justify-between mt-2.5">
+                    <button
+                      onClick={() => dispatch({ type: 'REMOVE_FROM_CART', payload: item.product.id })}
+                      className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center hover:bg-red-100 transition-colors btn-press"
+                    >
+                      <Trash2 size={14} className="text-red-400" />
                     </button>
-                    <div className="flex items-center gap-3 bg-gray-100 rounded-lg px-2 py-1">
-                      <button onClick={() => dispatch({ type: 'UPDATE_CART_QUANTITY', payload: { productId: item.product.id, quantity: item.quantity + 1 } })}>
-                        <Plus size={16} className="text-red-600" />
+                    <div className="flex items-center gap-0 bg-gray-50 rounded-xl border border-gray-100 overflow-hidden">
+                      <button
+                        onClick={() => dispatch({ type: 'UPDATE_CART_QUANTITY', payload: { productId: item.product.id, quantity: item.quantity + 1 } })}
+                        className="w-9 h-9 flex items-center justify-center hover:bg-gray-100 transition-colors btn-press"
+                      >
+                        <Plus size={14} className="text-red-600" />
                       </button>
-                      <span className="text-sm font-bold w-6 text-center">{item.quantity}</span>
-                      <button onClick={() => dispatch({ type: 'UPDATE_CART_QUANTITY', payload: { productId: item.product.id, quantity: item.quantity - 1 } })}>
-                        <Minus size={16} className="text-gray-500" />
+                      <span className="text-sm font-bold w-8 text-center text-gray-800">{item.quantity}</span>
+                      <button
+                        onClick={() => dispatch({ type: 'UPDATE_CART_QUANTITY', payload: { productId: item.product.id, quantity: item.quantity - 1 } })}
+                        className="w-9 h-9 flex items-center justify-center hover:bg-gray-100 transition-colors btn-press"
+                      >
+                        <Minus size={14} className="text-gray-500" />
                       </button>
                     </div>
                   </div>
@@ -75,20 +100,49 @@ export default function CartPage() {
           </div>
 
           {/* Order Summary */}
-          <div className="mx-4 mt-4 bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-            <h3 className="font-bold text-gray-800 mb-3">ملخص الطلب</h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between"><span className="text-gray-500">المجموع الفرعي</span><span>{formatPrice(totalOriginal)}</span></div>
-              {savings > 0 && <div className="flex justify-between text-green-600"><span>التوفير</span><span>-{formatPrice(savings)}</span></div>}
-              <div className="flex justify-between"><span className="text-gray-500">التوصيل</span><span className="text-green-600">مجاني</span></div>
-              <hr />
-              <div className="flex justify-between font-bold text-base"><span>الإجمالي</span><span className="text-red-600">{formatPrice(total)}</span></div>
+          <div className="mx-4 mt-4 bg-white rounded-2xl p-4 shadow-premium border border-gray-100/80 animate-fade-in-up">
+            <h3 className="font-extrabold text-gray-900 mb-4 flex items-center gap-2 justify-end">
+              <span>ملخص الطلب</span>
+              <Tag size={16} className="text-red-600" />
+            </h3>
+            <div className="space-y-3 text-sm">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-gray-700">{formatPrice(totalOriginal)}</span>
+                <span className="text-gray-500">المجموع الفرعي</span>
+              </div>
+              {savings > 0 && (
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold text-emerald-600">-{formatPrice(savings)}</span>
+                  <span className="text-emerald-600">التوفير</span>
+                </div>
+              )}
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-emerald-600">مجاني</span>
+                <span className="text-gray-500">التوصيل</span>
+              </div>
+
+              {/* Warranty */}
+              <div className="flex items-center gap-2 justify-end py-2 bg-blue-50 rounded-lg px-3">
+                <span className="text-xs text-blue-700 font-medium">جميع المنتجات مشمولة بالضمان</span>
+                <Shield size={14} className="text-blue-600" />
+              </div>
+
+              <div className="divider-gradient" />
+              <div className="flex justify-between items-center pt-1">
+                <span className="text-red-600 font-extrabold text-lg">{formatPrice(total)}</span>
+                <span className="font-bold text-gray-900">الإجمالي</span>
+              </div>
             </div>
           </div>
 
-          <div className="px-4 mt-4">
-            <button onClick={handleCheckout} className="w-full gradient-primary text-white py-3.5 rounded-xl font-bold text-base hover:opacity-90 transition-all">
-              إتمام الطلب - {formatPrice(total)}
+          {/* Checkout Button */}
+          <div className="px-4 mt-4 mb-4">
+            <button
+              onClick={handleCheckout}
+              className="w-full gradient-primary text-white py-4 rounded-2xl font-bold text-base shadow-glow-red btn-press flex items-center justify-center gap-2"
+            >
+              <span>إتمام الطلب</span>
+              <ShoppingBag size={18} />
             </button>
           </div>
         </>

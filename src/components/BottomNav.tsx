@@ -17,34 +17,43 @@ export default function BottomNav() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 safe-area-bottom">
-      <div className="max-w-lg mx-auto flex items-center justify-around py-2">
-        {tabs.map(tab => {
-          const isActive = location.pathname === tab.path;
-          const Icon = tab.icon;
-          return (
-            <button
-              key={tab.path}
-              onClick={() => navigate(tab.path)}
-              className={`flex flex-col items-center gap-0.5 px-3 py-1 relative transition-all ${
-                isActive ? 'text-red-600' : 'text-gray-500'
-              }`}
-            >
-              <div className="relative">
-                <Icon size={22} strokeWidth={isActive ? 2.5 : 1.5} />
-                {tab.badge ? (
-                  <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
-                    {tab.badge}
+    <nav className="fixed bottom-0 left-0 right-0 z-50 safe-area-bottom">
+      <div className="max-w-lg mx-auto px-2 pb-1">
+        <div className="glass rounded-2xl border border-white/40 shadow-premium-xl">
+          <div className="flex items-center justify-around py-1.5">
+            {tabs.map(tab => {
+              const isActive = location.pathname === tab.path;
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.path}
+                  onClick={() => navigate(tab.path)}
+                  className={`flex flex-col items-center gap-0.5 px-4 py-1.5 relative transition-all duration-300 btn-press rounded-xl ${
+                    isActive ? 'text-red-600' : 'text-gray-400 hover:text-gray-600'
+                  }`}
+                >
+                  <div className="relative">
+                    {isActive && (
+                      <div className="absolute -inset-2 bg-red-50 rounded-xl animate-scale-in" />
+                    )}
+                    <Icon size={22} strokeWidth={isActive ? 2.5 : 1.5} className="relative z-10" />
+                    {tab.badge ? (
+                      <span className="absolute -top-2.5 -right-2.5 bg-red-600 text-white text-[9px] rounded-full min-w-[18px] h-[18px] flex items-center justify-center font-bold animate-badge-pop shadow-glow-red">
+                        {tab.badge > 99 ? '99+' : tab.badge}
+                      </span>
+                    ) : null}
+                  </div>
+                  <span className={`text-[10px] transition-all duration-300 ${isActive ? 'font-bold text-red-600' : 'font-medium'}`}>
+                    {tab.label}
                   </span>
-                ) : null}
-                {isActive && tab.path === '/' && (
-                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full" />
-                )}
-              </div>
-              <span className={`text-[10px] ${isActive ? 'font-bold' : 'font-medium'}`}>{tab.label}</span>
-            </button>
-          );
-        })}
+                  {isActive && (
+                    <div className="absolute -bottom-0.5 w-5 h-0.5 bg-red-600 rounded-full animate-scale-in" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </nav>
   );
