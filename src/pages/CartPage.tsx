@@ -30,23 +30,23 @@ export default function CartPage() {
   };
 
   return (
-    <div className="pb-24 animate-fade-in bg-gray-50/50 min-h-screen">
+    <div className="pb-24 animate-fade-in bg-sovereign-surface/50 min-h-screen">
       {/* Header */}
-      <div className="glass sticky top-0 z-10 px-4 py-3 flex items-center justify-between border-b border-gray-100/50">
+      <div className="glass sticky top-0 z-10 px-4 py-3 flex items-center justify-between border-b border-glass-border/50">
         <div className="w-10" />
-        <h1 className="text-lg font-extrabold text-gray-900">عربتي ({state.cart.length})</h1>
-        <button onClick={() => navigate(-1)} className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-all btn-press">
-          <ArrowRight size={20} className="text-gray-600" />
+        <h1 className="text-lg font-extrabold text-text-primary">عربتي ({state.cart.length})</h1>
+        <button onClick={() => navigate(-1)} className="w-10 h-10 bg-sovereign-surface rounded-xl flex items-center justify-center hover:bg-sovereign-card transition-all btn-press">
+          <ArrowRight size={20} className="text-text-secondary" />
         </button>
       </div>
 
       {state.cart.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 px-4 animate-fade-in-up">
-          <div className="w-24 h-24 bg-gray-100 rounded-3xl flex items-center justify-center mb-6">
-            <ShoppingBag size={48} className="text-gray-300" />
+          <div className="w-24 h-24 bg-sovereign-card rounded-3xl flex items-center justify-center mb-6">
+            <ShoppingBag size={48} className="text-text-tertiary" />
           </div>
-          <p className="text-gray-600 text-lg font-bold mb-2">عربتك فارغة</p>
-          <p className="text-gray-400 text-sm mb-6">أضف منتجات للمتابعة</p>
+          <p className="text-text-secondary text-lg font-bold mb-2">عربتك فارغة</p>
+          <p className="text-text-tertiary text-sm mb-6">أضف منتجات للمتابعة</p>
           <button onClick={() => navigate('/')} className="gradient-primary text-white px-8 py-3.5 rounded-2xl font-bold shadow-glow-red btn-press">
             تصفح المنتجات
           </button>
@@ -61,36 +61,36 @@ export default function CartPage() {
 
           <div className="px-4 mt-4 space-y-3 stagger-children">
             {state.cart.map(item => (
-              <div key={item.product.id} className="bg-white rounded-2xl p-3.5 shadow-premium flex gap-3 border border-gray-100/80 animate-fade-in-up card-hover">
+              <div key={item.product.id} className="bg-sovereign-card rounded-2xl p-3.5 shadow-sovereign flex gap-3 border border-glass-border/80 animate-fade-in-up card-hover">
                 <div className="relative overflow-hidden rounded-xl">
                   <img src={item.product.image} alt={item.product.name} className="w-20 h-20 object-cover" />
                   {item.product.discount && (
-                    <span className="absolute top-1 left-1 bg-red-600 text-white text-[8px] px-1.5 py-0.5 rounded font-bold">-{item.product.discount}%</span>
+                    <span className="absolute top-1 left-1 bg-neon text-white text-[8px] px-1.5 py-0.5 rounded font-bold">-{item.product.discount}%</span>
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-bold text-gray-800 line-clamp-2 leading-relaxed">{item.product.name}</h3>
-                  <p className="text-red-600 font-extrabold text-sm mt-1">{formatPrice(item.product.price)}</p>
+                  <h3 className="text-sm font-bold text-text-primary line-clamp-2 leading-relaxed">{item.product.name}</h3>
+                  <p className="text-neon font-extrabold text-sm mt-1">{formatPrice(item.product.price)}</p>
                   <div className="flex items-center justify-between mt-2.5">
                     <button
                       onClick={() => dispatch({ type: 'REMOVE_FROM_CART', payload: item.product.id })}
-                      className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center hover:bg-red-100 transition-colors btn-press"
+                      className="w-8 h-8 rounded-lg bg-sovereign-card flex items-center justify-center hover:bg-sovereign-card transition-colors btn-press"
                     >
                       <Trash2 size={14} className="text-red-400" />
                     </button>
-                    <div className="flex items-center gap-0 bg-gray-50 rounded-xl border border-gray-100 overflow-hidden">
+                    <div className="flex items-center gap-0 bg-sovereign-surface rounded-xl border border-glass-border overflow-hidden">
                       <button
                         onClick={() => dispatch({ type: 'UPDATE_CART_QUANTITY', payload: { productId: item.product.id, quantity: item.quantity + 1 } })}
-                        className="w-9 h-9 flex items-center justify-center hover:bg-gray-100 transition-colors btn-press"
+                        className="w-9 h-9 flex items-center justify-center hover:bg-sovereign-card transition-colors btn-press"
                       >
-                        <Plus size={14} className="text-red-600" />
+                        <Plus size={14} className="text-neon" />
                       </button>
-                      <span className="text-sm font-bold w-8 text-center text-gray-800">{item.quantity}</span>
+                      <span className="text-sm font-bold w-8 text-center text-text-primary">{item.quantity}</span>
                       <button
                         onClick={() => dispatch({ type: 'UPDATE_CART_QUANTITY', payload: { productId: item.product.id, quantity: item.quantity - 1 } })}
-                        className="w-9 h-9 flex items-center justify-center hover:bg-gray-100 transition-colors btn-press"
+                        className="w-9 h-9 flex items-center justify-center hover:bg-sovereign-card transition-colors btn-press"
                       >
-                        <Minus size={14} className="text-gray-500" />
+                        <Minus size={14} className="text-text-secondary" />
                       </button>
                     </div>
                   </div>
@@ -100,15 +100,15 @@ export default function CartPage() {
           </div>
 
           {/* Order Summary */}
-          <div className="mx-4 mt-4 bg-white rounded-2xl p-4 shadow-premium border border-gray-100/80 animate-fade-in-up">
-            <h3 className="font-extrabold text-gray-900 mb-4 flex items-center gap-2 justify-end">
+          <div className="mx-4 mt-4 bg-sovereign-card rounded-2xl p-4 shadow-sovereign border border-glass-border/80 animate-fade-in-up">
+            <h3 className="font-extrabold text-text-primary mb-4 flex items-center gap-2 justify-end">
               <span>ملخص الطلب</span>
-              <Tag size={16} className="text-red-600" />
+              <Tag size={16} className="text-neon" />
             </h3>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between items-center">
-                <span className="font-semibold text-gray-700">{formatPrice(totalOriginal)}</span>
-                <span className="text-gray-500">المجموع الفرعي</span>
+                <span className="font-semibold text-text-primary">{formatPrice(totalOriginal)}</span>
+                <span className="text-text-secondary">المجموع الفرعي</span>
               </div>
               {savings > 0 && (
                 <div className="flex justify-between items-center">
@@ -118,7 +118,7 @@ export default function CartPage() {
               )}
               <div className="flex justify-between items-center">
                 <span className="font-semibold text-emerald-600">مجاني</span>
-                <span className="text-gray-500">التوصيل</span>
+                <span className="text-text-secondary">التوصيل</span>
               </div>
 
               {/* Warranty */}
@@ -129,8 +129,8 @@ export default function CartPage() {
 
               <div className="divider-gradient" />
               <div className="flex justify-between items-center pt-1">
-                <span className="text-red-600 font-extrabold text-lg">{formatPrice(total)}</span>
-                <span className="font-bold text-gray-900">الإجمالي</span>
+                <span className="text-neon font-extrabold text-lg">{formatPrice(total)}</span>
+                <span className="font-bold text-text-primary">الإجمالي</span>
               </div>
             </div>
           </div>

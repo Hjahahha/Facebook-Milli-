@@ -13,25 +13,25 @@ export default function CategoryDetailPage() {
 
   return (
     <div className="pb-20 animate-fade-in">
-      <div className="bg-white px-4 py-3 flex items-center justify-between border-b sticky top-0 z-10">
+      <div className="bg-sovereign-card px-4 py-3 flex items-center justify-between border-b sticky top-0 z-10">
         <div className="relative">
-          <button onClick={() => navigate('/cart')}><ShoppingCart size={22} className="text-gray-600" /></button>
-          {cartCount > 0 && <span className="absolute -top-2 -right-2 w-4 h-4 bg-red-600 text-white text-[10px] rounded-full flex items-center justify-center font-bold">{cartCount}</span>}
+          <button onClick={() => navigate('/cart')}><ShoppingCart size={22} className="text-text-secondary" /></button>
+          {cartCount > 0 && <span className="absolute -top-2 -right-2 w-4 h-4 bg-neon text-white text-[10px] rounded-full flex items-center justify-center font-bold">{cartCount}</span>}
         </div>
         <h1 className="text-lg font-bold">{category?.name || 'فئة'}</h1>
-        <button onClick={() => navigate(-1)}><ArrowRight size={24} className="text-gray-600" /></button>
+        <button onClick={() => navigate(-1)}><ArrowRight size={24} className="text-text-secondary" /></button>
       </div>
 
       {/* Subcategories */}
       {category && category.subcategories.length > 0 && (
         <div className="px-4 py-3 flex gap-2 overflow-x-auto hide-scrollbar">
-          <button className="whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold bg-red-600 text-white">
+          <button className="whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold bg-neon text-white">
             الكل
           </button>
           {category.subcategories.map(sub => (
             <button
               key={sub.id}
-              className="whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 hover:bg-gray-200"
+              className="whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold bg-sovereign-card text-text-secondary hover:bg-sovereign-border"
             >
               {sub.name}
             </button>
@@ -47,7 +47,7 @@ export default function CategoryDetailPage() {
 
       {products.length === 0 && (
         <div className="text-center py-20">
-          <p className="text-gray-400 text-lg">لا توجد منتجات في هذه الفئة</p>
+          <p className="text-text-tertiary text-lg">لا توجد منتجات في هذه الفئة</p>
         </div>
       )}
     </div>

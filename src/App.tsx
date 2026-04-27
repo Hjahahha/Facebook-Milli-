@@ -27,13 +27,17 @@ import MerchantJoinPage from './pages/merchant/MerchantJoinPage';
 import MerchantSuccessPage from './pages/merchant/MerchantSuccessPage';
 import MerchantDashboardPage from './pages/merchant/MerchantDashboardPage';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
+import CarsPage from './pages/CarsPage';
+import RealEstatePage from './pages/RealEstatePage';
+import ServicesPage from './pages/ServicesPage';
+import ChatPage from './pages/ChatPage';
 
 function AppContent() {
   const location = useLocation();
   const hideNav = ['/login', '/register', '/merchant-join', '/merchant-success'].includes(location.pathname);
 
   return (
-    <div className="max-w-lg mx-auto bg-white min-h-screen shadow-xl relative">
+    <div className="max-w-lg mx-auto min-h-screen shadow-xl relative" style={{ background: '#050505' }}>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/categories" element={<CategoriesPage />} />
@@ -63,6 +67,10 @@ function AppContent() {
         <Route path="/merchant-dashboard" element={<MerchantDashboardPage />} />
         <Route path="/admin" element={<AdminDashboardPage />} />
         <Route path="/sell" element={<MyStorePage />} />
+        <Route path="/cars" element={<CarsPage />} />
+        <Route path="/realestate" element={<RealEstatePage />} />
+        <Route path="/services" element={<ServicesPage />} />
+        <Route path="/chat" element={<ChatPage />} />
         <Route path="/language" element={<LanguagePlaceholder />} />
         <Route path="/section/:id" element={<SectionPlaceholder />} />
         <Route path="*" element={<NotFoundPage />} />
@@ -74,13 +82,13 @@ function AppContent() {
 
 function LanguagePlaceholder() {
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen flex flex-col items-center justify-center px-6" style={{ background: '#050505' }}>
       <p className="text-4xl mb-4">🌐</p>
-      <h2 className="text-lg font-bold text-gray-800 mb-2">اللغة</h2>
-      <p className="text-gray-500 text-center">العربية هي اللغة الافتراضية</p>
+      <h2 className="text-lg font-bold mb-2" style={{ color: '#F5F5F5' }}>اللغة</h2>
+      <p style={{ color: '#707070' }} className="text-center">العربية هي اللغة الافتراضية</p>
       <div className="mt-6 space-y-3 w-full max-w-xs">
         {['العربية', 'English', 'کوردی'].map(lang => (
-          <button key={lang} className={`w-full py-3 rounded-xl border text-sm font-semibold ${lang === 'العربية' ? 'bg-red-600 text-white border-red-600' : 'bg-white text-gray-700 border-gray-200'}`}>
+          <button key={lang} className="w-full py-3 rounded-xl border text-sm font-semibold" style={lang === 'العربية' ? { background: '#00D4FF', color: '#050505', borderColor: '#00D4FF' } : { background: '#111', color: '#B0B0B0', borderColor: 'rgba(255,255,255,0.06)' }}>
             {lang}
           </button>
         ))}
@@ -91,19 +99,19 @@ function LanguagePlaceholder() {
 
 function SectionPlaceholder() {
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen flex flex-col items-center justify-center px-6" style={{ background: '#050505' }}>
       <p className="text-4xl mb-4">🏗️</p>
-      <h2 className="text-lg font-bold text-gray-800">قريباً</h2>
-      <p className="text-gray-500 text-center mt-2">هذا القسم قيد التطوير</p>
+      <h2 className="text-lg font-bold" style={{ color: '#F5F5F5' }}>قريباً</h2>
+      <p className="text-center mt-2" style={{ color: '#707070' }}>هذا القسم قيد التطوير</p>
     </div>
   );
 }
 
 function NotFoundPage() {
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6">
-      <p className="text-6xl mb-4">404</p>
-      <h2 className="text-lg font-bold text-gray-800">الصفحة غير موجودة</h2>
+    <div className="min-h-screen flex flex-col items-center justify-center px-6" style={{ background: '#050505' }}>
+      <p className="text-6xl mb-4" style={{ color: '#00D4FF' }}>404</p>
+      <h2 className="text-lg font-bold" style={{ color: '#F5F5F5' }}>الصفحة غير موجودة</h2>
     </div>
   );
 }

@@ -15,7 +15,7 @@ export default function HomePage() {
   const tabs = ['الصفحة الرئيسية', 'إلكترونيات', 'الملابس', 'كوزمتك', 'المنزل', 'ألعاب'];
 
   return (
-    <div className="pb-24 animate-fade-in bg-gray-50/50">
+    <div className="pb-24 animate-fade-in" style={{ background: '#050505' }}>
       <TopBar />
       <SearchBar />
 
@@ -26,11 +26,12 @@ export default function HomePage() {
             <button
               key={tab}
               onClick={() => i > 0 ? navigate(`/category/${state.categories[i - 1]?.id || 'electronics'}`) : null}
-              className={`whitespace-nowrap px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 btn-press ${
-                i === 0
-                  ? 'bg-gray-900 text-white shadow-premium'
-                  : 'bg-white text-gray-500 hover:bg-gray-100 border border-gray-100'
-              }`}
+              className="whitespace-nowrap px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 btn-press"
+              style={{
+                background: i === 0 ? 'rgba(0,212,255,0.15)' : '#111',
+                color: i === 0 ? '#00D4FF' : '#707070',
+                border: `1px solid ${i === 0 ? 'rgba(0,212,255,0.3)' : 'rgba(255,255,255,0.06)'}`,
+              }}
             >
               {tab}
             </button>
@@ -46,23 +47,23 @@ export default function HomePage() {
 
       {/* User Info Bar */}
       {state.isLoggedIn && state.user && (
-        <div className="mx-4 mt-4 bg-white rounded-2xl p-3.5 shadow-premium flex items-center justify-between border border-gray-100/80">
+        <div className="mx-4 mt-4 card-sovereign p-3.5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 bg-amber-50 px-2.5 py-1 rounded-lg">
-              <span className="text-amber-500 text-sm">🪙</span>
-              <span className="text-xs font-bold text-amber-700">{state.user.points}</span>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg" style={{ background: 'rgba(255,215,0,0.1)' }}>
+              <span className="text-sm">🪙</span>
+              <span className="text-xs font-bold" style={{ color: '#FFD700' }}>{state.user.points}</span>
             </div>
-            <div className="flex items-center gap-1.5 bg-red-50 px-2.5 py-1 rounded-lg">
-              <Flame size={13} className="text-red-500" />
-              <span className="text-xs font-bold text-red-600">0 يوم</span>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg" style={{ background: 'rgba(255,23,68,0.1)' }}>
+              <Flame size={13} style={{ color: '#FF1744' }} />
+              <span className="text-xs font-bold" style={{ color: '#FF1744' }}>0 يوم</span>
             </div>
           </div>
           <div className="flex items-center gap-2.5">
             <div className="text-right">
-              <span className="text-sm font-bold text-gray-800">{state.user.name}</span>
+              <span className="text-sm font-bold" style={{ color: '#F5F5F5' }}>{state.user.name}</span>
             </div>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center shadow-sm">
-              <span className="text-white text-sm font-bold">{state.user.name.charAt(0)}</span>
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm" style={{ background: 'linear-gradient(135deg, #00D4FF, #0099CC)' }}>
+              <span className="text-sm font-bold" style={{ color: '#050505' }}>{state.user.name.charAt(0)}</span>
             </div>
           </div>
         </div>
@@ -71,19 +72,18 @@ export default function HomePage() {
       {/* Flash Deals Section */}
       <div className="px-4 mt-6">
         <div className="flex items-center justify-between mb-3">
-          <button onClick={() => navigate('/deals')} className="flex items-center gap-1 text-xs text-red-600 font-semibold hover:underline">
+          <button onClick={() => navigate('/deals')} className="flex items-center gap-1 text-xs font-semibold hover:underline" style={{ color: '#00D4FF' }}>
             <ChevronLeft size={14} />
             <span>اظهار الكل</span>
           </button>
           <div className="flex items-center gap-2">
-            <h2 className="text-base font-extrabold text-gray-900">عروض سريعة</h2>
-            <div className="w-7 h-7 bg-red-100 rounded-lg flex items-center justify-center">
-              <Flame size={15} className="text-red-600" />
+            <h2 className="text-base font-extrabold" style={{ color: '#F5F5F5' }}>عروض سريعة</h2>
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'rgba(255,23,68,0.15)' }}>
+              <Flame size={15} style={{ color: '#FF1744' }} />
             </div>
           </div>
         </div>
 
-        {/* Flash deals horizontal scroll */}
         <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 stagger-children">
           {state.products.filter(p => p.discount && p.discount >= 20).slice(0, 6).map(product => (
             <div key={product.id} className="min-w-[160px] max-w-[160px] animate-fade-in-up">
@@ -96,14 +96,14 @@ export default function HomePage() {
       {/* Featured Products */}
       <div className="px-4 mt-6">
         <div className="flex items-center justify-between mb-3">
-          <button onClick={() => navigate('/deals')} className="flex items-center gap-1 text-xs text-red-600 font-semibold hover:underline">
+          <button onClick={() => navigate('/deals')} className="flex items-center gap-1 text-xs font-semibold hover:underline" style={{ color: '#FFD700' }}>
             <ChevronLeft size={14} />
             <span>اظهار الكل</span>
           </button>
           <div className="flex items-center gap-2">
-            <h2 className="text-base font-extrabold text-gray-900">مجموعة الربيع</h2>
-            <div className="w-7 h-7 bg-emerald-100 rounded-lg flex items-center justify-center">
-              <Sparkles size={15} className="text-emerald-600" />
+            <h2 className="text-base font-extrabold" style={{ color: '#F5F5F5' }}>مجموعة الربيع</h2>
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'rgba(0,230,118,0.15)' }}>
+              <Sparkles size={15} style={{ color: '#00E676' }} />
             </div>
           </div>
         </div>
@@ -117,14 +117,14 @@ export default function HomePage() {
       {/* Trending Products */}
       <div className="px-4 mt-6">
         <div className="flex items-center justify-between mb-3">
-          <button onClick={() => navigate('/deals')} className="flex items-center gap-1 text-xs text-red-600 font-semibold hover:underline">
+          <button onClick={() => navigate('/deals')} className="flex items-center gap-1 text-xs font-semibold hover:underline" style={{ color: '#00D4FF' }}>
             <ChevronLeft size={14} />
             <span>اظهار الكل</span>
           </button>
           <div className="flex items-center gap-2">
-            <h2 className="text-base font-extrabold text-gray-900">الأكثر مبيعاً</h2>
-            <div className="w-7 h-7 bg-blue-100 rounded-lg flex items-center justify-center">
-              <TrendingUp size={15} className="text-blue-600" />
+            <h2 className="text-base font-extrabold" style={{ color: '#F5F5F5' }}>الأكثر مبيعاً</h2>
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'rgba(0,212,255,0.15)' }}>
+              <TrendingUp size={15} style={{ color: '#00D4FF' }} />
             </div>
           </div>
         </div>
@@ -138,14 +138,14 @@ export default function HomePage() {
       {/* Latest Products */}
       <div className="px-4 mt-6">
         <div className="flex items-center justify-between mb-3">
-          <button onClick={() => navigate('/deals')} className="flex items-center gap-1 text-xs text-red-600 font-semibold hover:underline">
+          <button onClick={() => navigate('/deals')} className="flex items-center gap-1 text-xs font-semibold hover:underline" style={{ color: '#00D4FF' }}>
             <ChevronLeft size={14} />
             <span>اظهار الكل</span>
           </button>
           <div className="flex items-center gap-2">
-            <h2 className="text-base font-extrabold text-gray-900">أحدث المنتجات</h2>
-            <div className="w-7 h-7 bg-purple-100 rounded-lg flex items-center justify-center">
-              <Clock size={15} className="text-purple-600" />
+            <h2 className="text-base font-extrabold" style={{ color: '#F5F5F5' }}>أحدث المنتجات</h2>
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'rgba(138,43,226,0.15)' }}>
+              <Clock size={15} style={{ color: '#9C27B0' }} />
             </div>
           </div>
         </div>
@@ -157,7 +157,7 @@ export default function HomePage() {
       </div>
 
       {/* Trust Badges */}
-      <div className="mx-4 mt-8 mb-4 bg-white rounded-2xl p-4 shadow-premium border border-gray-100/80">
+      <div className="mx-4 mt-8 mb-4 card-sovereign p-4">
         <div className="grid grid-cols-3 gap-3">
           {[
             { icon: '🛡️', label: 'ضمان الجودة', sub: '100% أصلي' },
@@ -166,8 +166,8 @@ export default function HomePage() {
           ].map(badge => (
             <div key={badge.label} className="flex flex-col items-center gap-1 text-center">
               <span className="text-xl">{badge.icon}</span>
-              <span className="text-[10px] font-bold text-gray-800">{badge.label}</span>
-              <span className="text-[9px] text-gray-400">{badge.sub}</span>
+              <span className="text-[10px] font-bold" style={{ color: '#F5F5F5' }}>{badge.label}</span>
+              <span className="text-[9px]" style={{ color: '#707070' }}>{badge.sub}</span>
             </div>
           ))}
         </div>

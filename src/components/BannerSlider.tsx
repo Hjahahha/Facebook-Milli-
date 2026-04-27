@@ -26,8 +26,8 @@ export default function BannerSlider() {
   if (activeAds.length === 0) return null;
 
   return (
-    <div className="relative mx-4 rounded-2xl overflow-hidden shadow-premium-lg group">
-      <div className="relative h-44 bg-gray-200">
+    <div className="relative mx-4 rounded-2xl overflow-hidden shadow-sovereign-lg group" style={{ border: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="relative h-44" style={{ background: '#111' }}>
         {activeAds.map((ad, i) => (
           <div
             key={ad.id}
@@ -36,11 +36,11 @@ export default function BannerSlider() {
             }`}
           >
             <img src={ad.image} alt={ad.title} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-l from-black/60 via-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-l from-black/70 via-black/30 to-transparent" />
             <div className="absolute inset-0 flex items-center justify-end p-6">
               <div className="text-right max-w-[200px]">
                 <h3 className="text-white text-lg font-bold leading-snug drop-shadow-lg">{ad.title}</h3>
-                <button className="mt-3 bg-white/20 backdrop-blur-sm text-white text-xs px-4 py-2 rounded-xl font-semibold border border-white/30 hover:bg-white/30 transition-all">
+                <button className="mt-3 text-xs px-4 py-2 rounded-xl font-semibold transition-all btn-press" style={{ background: 'rgba(0,212,255,0.2)', color: '#00D4FF', border: '1px solid rgba(0,212,255,0.3)' }}>
                   تسوق الآن
                 </button>
               </div>
@@ -53,24 +53,27 @@ export default function BannerSlider() {
         <>
           <button
             onClick={() => goTo((current - 1 + activeAds.length) % activeAds.length)}
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 glass rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white/90 btn-press"
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 glass rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 btn-press"
           >
-            <ChevronLeft size={16} className="text-gray-700" />
+            <ChevronLeft size={16} style={{ color: '#F5F5F5' }} />
           </button>
           <button
             onClick={() => goTo((current + 1) % activeAds.length)}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 glass rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white/90 btn-press"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 glass rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 btn-press"
           >
-            <ChevronRight size={16} className="text-gray-700" />
+            <ChevronRight size={16} style={{ color: '#F5F5F5' }} />
           </button>
           <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
             {activeAds.map((_, i) => (
               <button
                 key={i}
                 onClick={() => goTo(i)}
-                className={`rounded-full transition-all duration-300 ${
-                  i === current ? 'bg-white w-5 h-1.5' : 'bg-white/50 w-1.5 h-1.5 hover:bg-white/70'
-                }`}
+                className="rounded-full transition-all duration-300"
+                style={{
+                  width: i === current ? '20px' : '6px',
+                  height: '6px',
+                  background: i === current ? '#00D4FF' : 'rgba(255,255,255,0.3)',
+                }}
               />
             ))}
           </div>

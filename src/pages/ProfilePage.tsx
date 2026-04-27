@@ -21,21 +21,21 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white animate-fade-in">
+    <div className="min-h-screen bg-sovereign-card animate-fade-in">
       <div className="px-4 py-3 flex items-center justify-between border-b">
         <div />
         <h1 className="text-lg font-bold">حسابي</h1>
-        <button onClick={() => navigate(-1)}><ArrowRight size={24} className="text-gray-600" /></button>
+        <button onClick={() => navigate(-1)}><ArrowRight size={24} className="text-text-secondary" /></button>
       </div>
 
       <div className="px-6 pt-6">
         {/* Avatar */}
         <div className="flex justify-center mb-8">
           <div className="relative">
-            <div className="w-28 h-28 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden">
+            <div className="w-28 h-28 rounded-full bg-sovereign-card flex items-center justify-center overflow-hidden">
               <span className="text-5xl">👨‍💼</span>
             </div>
-            <button className="absolute bottom-0 right-0 w-9 h-9 bg-red-600 rounded-full flex items-center justify-center shadow-lg">
+            <button className="absolute bottom-0 right-0 w-9 h-9 bg-neon rounded-full flex items-center justify-center shadow-lg">
               <Camera size={16} className="text-white" />
             </button>
           </div>
@@ -43,34 +43,34 @@ export default function ProfilePage() {
 
         <div className="space-y-4">
           <div>
-            <label className="text-xs text-gray-500 block text-right mb-1">رقم الهاتف</label>
-            <input value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} className="w-full h-14 bg-gray-50 rounded-xl px-4 text-sm text-right outline-none border border-gray-200" />
+            <label className="text-xs text-text-secondary block text-right mb-1">رقم الهاتف</label>
+            <input value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} className="w-full h-14 bg-sovereign-surface rounded-xl px-4 text-sm text-right outline-none border border-sovereign-border" />
           </div>
           <div>
-            <label className="text-xs text-gray-500 block text-right mb-1">اسم</label>
-            <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="w-full h-14 bg-gray-50 rounded-xl px-4 text-sm text-right outline-none border border-gray-200 font-bold" />
+            <label className="text-xs text-text-secondary block text-right mb-1">اسم</label>
+            <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="w-full h-14 bg-sovereign-surface rounded-xl px-4 text-sm text-right outline-none border border-sovereign-border font-bold" />
           </div>
           <div>
-            <label className="text-xs text-gray-500 block text-right mb-1">البريد الإلكتروني</label>
-            <input value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="البريد الإلكتروني" className="w-full h-14 bg-gray-50 rounded-xl px-4 text-sm text-right outline-none border border-gray-200" />
+            <label className="text-xs text-text-secondary block text-right mb-1">البريد الإلكتروني</label>
+            <input value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="البريد الإلكتروني" className="w-full h-14 bg-sovereign-surface rounded-xl px-4 text-sm text-right outline-none border border-sovereign-border" />
           </div>
           <div>
-            <label className="text-xs text-gray-500 block text-right mb-1">عيد ميلاد</label>
-            <input type="date" value={form.birthday} onChange={e => setForm({ ...form, birthday: e.target.value })} className="w-full h-14 bg-gray-50 rounded-xl px-4 text-sm text-right outline-none border border-gray-200" />
+            <label className="text-xs text-text-secondary block text-right mb-1">عيد ميلاد</label>
+            <input type="date" value={form.birthday} onChange={e => setForm({ ...form, birthday: e.target.value })} className="w-full h-14 bg-sovereign-surface rounded-xl px-4 text-sm text-right outline-none border border-sovereign-border" />
           </div>
           <div>
-            <label className="text-xs text-gray-500 block text-right mb-1">المكان</label>
-            <div className="w-full h-14 bg-gray-50 rounded-xl px-4 text-sm flex items-center justify-between border border-gray-200">
-              <span className="text-gray-400">‹</span>
-              <span className="text-gray-700">{form.location || 'اختر المكان'}</span>
+            <label className="text-xs text-text-secondary block text-right mb-1">المكان</label>
+            <div className="w-full h-14 bg-sovereign-surface rounded-xl px-4 text-sm flex items-center justify-between border border-sovereign-border">
+              <span className="text-text-tertiary">‹</span>
+              <span className="text-text-primary">{form.location || 'اختر المكان'}</span>
             </div>
           </div>
           <div>
-            <label className="text-xs text-gray-500 block text-right mb-2">الجنس</label>
+            <label className="text-xs text-text-secondary block text-right mb-2">الجنس</label>
             <div className="flex items-center gap-4 justify-end">
               {[{ value: 'male', label: 'ذكر' }, { value: 'female', label: 'أنثى' }, { value: 'other', label: 'آخر' }].map(g => (
                 <label key={g.value} className="flex items-center gap-1.5 cursor-pointer">
-                  <span className="text-sm text-gray-600">{g.label}</span>
+                  <span className="text-sm text-text-secondary">{g.label}</span>
                   <input type="radio" name="gender" value={g.value} checked={form.gender === g.value} onChange={e => setForm({ ...form, gender: e.target.value as 'male' | 'female' | 'other' })} className="accent-red-600 w-4 h-4" />
                 </label>
               ))}
@@ -80,7 +80,7 @@ export default function ProfilePage() {
           <button onClick={handleUpdate} className="w-full gradient-primary text-white py-4 rounded-xl font-bold text-base mt-4">
             تحديث
           </button>
-          <button className="w-full text-center text-red-500 text-sm font-medium py-2">
+          <button className="w-full text-center text-error text-sm font-medium py-2">
             حذف الحساب
           </button>
         </div>

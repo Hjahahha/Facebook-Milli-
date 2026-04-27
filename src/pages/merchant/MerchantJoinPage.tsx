@@ -74,27 +74,27 @@ export default function MerchantJoinPage() {
     }, 800);
   };
 
-  const inputClass = "w-full h-14 bg-gray-50 rounded-2xl px-4 text-sm text-right outline-none border-2 border-gray-100 focus:border-red-400 focus:ring-4 focus:ring-red-50 focus:bg-white transition-all duration-300";
+  const inputClass = "w-full h-14 bg-sovereign-surface rounded-2xl px-4 text-sm text-right outline-none border-2 border-glass-border focus:border-red-400 focus:ring-4 focus:ring-red-50 focus:bg-sovereign-card transition-all duration-300";
 
   return (
-    <div className="min-h-screen bg-gray-50/50 animate-fade-in pb-10">
-      <div className="glass sticky top-0 z-10 px-4 py-3 flex items-center justify-between border-b border-gray-100/50">
+    <div className="min-h-screen bg-sovereign-surface/50 animate-fade-in pb-10">
+      <div className="glass sticky top-0 z-10 px-4 py-3 flex items-center justify-between border-b border-glass-border/50">
         <div className="w-10" />
-        <h1 className="text-lg font-extrabold text-gray-900">انضم كتاجر</h1>
-        <button onClick={() => navigate(-1)} className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-all btn-press">
-          <ArrowRight size={20} className="text-gray-600" />
+        <h1 className="text-lg font-extrabold text-text-primary">انضم كتاجر</h1>
+        <button onClick={() => navigate(-1)} className="w-10 h-10 bg-sovereign-surface rounded-xl flex items-center justify-center hover:bg-sovereign-card transition-all btn-press">
+          <ArrowRight size={20} className="text-text-secondary" />
         </button>
       </div>
 
       {/* Step Indicator */}
       <div className="px-8 pt-5">
         <div className="flex items-center gap-3 justify-center">
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold ${step >= 2 ? 'bg-emerald-100 text-emerald-700' : step === 1 ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-500'}`}>
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold ${step >= 2 ? 'bg-emerald-100 text-emerald-700' : step === 1 ? 'bg-sovereign-card text-red-700' : 'bg-sovereign-card text-text-secondary'}`}>
             <span>اختر الباقة</span>
-            {step >= 2 ? <Check size={14} /> : <span className="w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center text-[10px]">1</span>}
+            {step >= 2 ? <Check size={14} /> : <span className="w-5 h-5 bg-neon text-white rounded-full flex items-center justify-center text-[10px]">1</span>}
           </div>
-          <div className="w-8 h-0.5 bg-gray-200" />
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold ${step === 2 ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-500'}`}>
+          <div className="w-8 h-0.5 bg-sovereign-border" />
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold ${step === 2 ? 'bg-sovereign-card text-red-700' : 'bg-sovereign-card text-text-secondary'}`}>
             <span>المعلومات</span>
             <span className="w-5 h-5 bg-gray-300 text-white rounded-full flex items-center justify-center text-[10px]">2</span>
           </div>
@@ -104,40 +104,40 @@ export default function MerchantJoinPage() {
       {step === 1 && (
         <div className="px-4 pt-6">
           <div className="text-center mb-6 animate-fade-in-up">
-            <div className="w-16 h-16 bg-gradient-to-br from-red-100 to-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-premium">
-              <Store size={28} className="text-red-600" />
+            <div className="w-16 h-16 bg-gradient-to-br from-red-100 to-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sovereign">
+              <Store size={28} className="text-neon" />
             </div>
-            <h2 className="text-xl font-black text-gray-900 mb-2">ابدأ رحلتك التجارية</h2>
-            <p className="text-sm text-gray-400 font-medium">اختر الباقة المناسبة لعملك</p>
+            <h2 className="text-xl font-black text-text-primary mb-2">ابدأ رحلتك التجارية</h2>
+            <p className="text-sm text-text-tertiary font-medium">اختر الباقة المناسبة لعملك</p>
           </div>
 
           {/* Standard Tier */}
           <div
             onClick={() => setSelectedTier('standard')}
             className={`rounded-2xl p-5 mb-4 cursor-pointer transition-all duration-300 border-2 animate-fade-in-up card-hover ${
-              selectedTier === 'standard' ? 'border-red-400 bg-red-50/50 shadow-premium-lg' : 'border-gray-100 bg-white shadow-premium'
+              selectedTier === 'standard' ? 'border-red-400 bg-sovereign-card/50 shadow-sovereign-lg' : 'border-glass-border bg-sovereign-card shadow-sovereign'
             }`}
           >
             <div className="flex items-center justify-between mb-4">
-              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${selectedTier === 'standard' ? 'border-red-500 bg-red-500' : 'border-gray-300'}`}>
+              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${selectedTier === 'standard' ? 'border-red-500 bg-error' : 'border-sovereign-border'}`}>
                 {selectedTier === 'standard' && <Check size={14} className="text-white" />}
               </div>
               <div className="flex items-center gap-3">
                 <div className="text-right">
-                  <h3 className="text-lg font-extrabold text-gray-900">الباقة العادية</h3>
+                  <h3 className="text-lg font-extrabold text-text-primary">الباقة العادية</h3>
                   <div className="flex items-center gap-1 justify-end">
-                    <span className="text-[10px] text-gray-400">/شهر</span>
-                    <span className="text-2xl font-black text-red-600">25,000</span>
+                    <span className="text-[10px] text-text-tertiary">/شهر</span>
+                    <span className="text-2xl font-black text-neon">25,000</span>
                   </div>
                 </div>
-                <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center">
-                  <Star size={24} className="text-gray-400" />
+                <div className="w-12 h-12 bg-sovereign-card rounded-xl flex items-center justify-center">
+                  <Star size={24} className="text-text-tertiary" />
                 </div>
               </div>
             </div>
             <div className="space-y-2.5">
               {standardFeatures.map((f, i) => (
-                <div key={i} className="flex items-center gap-2.5 justify-end text-sm text-gray-600">
+                <div key={i} className="flex items-center gap-2.5 justify-end text-sm text-text-secondary">
                   <span className="font-medium">{f}</span>
                   <div className="w-5 h-5 bg-emerald-100 rounded-full flex items-center justify-center shrink-0">
                     <Check size={10} className="text-emerald-600" />
@@ -151,7 +151,7 @@ export default function MerchantJoinPage() {
           <div
             onClick={() => setSelectedTier('premium')}
             className={`rounded-2xl p-5 mb-6 cursor-pointer transition-all duration-300 border-2 relative overflow-hidden animate-fade-in-up card-hover ${
-              selectedTier === 'premium' ? 'border-amber-400 bg-amber-50/50 shadow-premium-lg' : 'border-gray-100 bg-white shadow-premium'
+              selectedTier === 'premium' ? 'border-amber-400 bg-amber-50/50 shadow-sovereign-lg' : 'border-glass-border bg-sovereign-card shadow-sovereign'
             }`}
           >
             <div className="absolute top-0 left-0 bg-gradient-to-r from-amber-500 to-yellow-500 text-white text-[10px] font-bold px-4 py-1.5 rounded-br-xl flex items-center gap-1 shadow-lg">
@@ -159,14 +159,14 @@ export default function MerchantJoinPage() {
               <span>الأكثر شعبية</span>
             </div>
             <div className="flex items-center justify-between mb-4 mt-2">
-              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${selectedTier === 'premium' ? 'border-amber-500 bg-amber-500' : 'border-gray-300'}`}>
+              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${selectedTier === 'premium' ? 'border-amber-500 bg-amber-500' : 'border-sovereign-border'}`}>
                 {selectedTier === 'premium' && <Check size={14} className="text-white" />}
               </div>
               <div className="flex items-center gap-3">
                 <div className="text-right">
-                  <h3 className="text-lg font-extrabold text-gray-900">الباقة المميزة</h3>
+                  <h3 className="text-lg font-extrabold text-text-primary">الباقة المميزة</h3>
                   <div className="flex items-center gap-1 justify-end">
-                    <span className="text-[10px] text-gray-400">/شهر</span>
+                    <span className="text-[10px] text-text-tertiary">/شهر</span>
                     <span className="text-2xl font-black text-amber-600">99,000</span>
                   </div>
                 </div>
@@ -177,7 +177,7 @@ export default function MerchantJoinPage() {
             </div>
             <div className="space-y-2.5 max-h-64 overflow-y-auto">
               {premiumFeatures.map((f, i) => (
-                <div key={i} className="flex items-center gap-2.5 justify-end text-sm text-gray-600">
+                <div key={i} className="flex items-center gap-2.5 justify-end text-sm text-text-secondary">
                   <span className="font-medium">{f}</span>
                   <div className="w-5 h-5 bg-amber-100 rounded-full flex items-center justify-center shrink-0">
                     <Zap size={10} className="text-amber-600" />
@@ -196,24 +196,24 @@ export default function MerchantJoinPage() {
 
       {step === 2 && (
         <form onSubmit={handleSubmit} className="px-4 pt-6 space-y-4 animate-slide-up">
-          <div className="bg-white rounded-2xl p-4 border border-gray-100/80 shadow-premium mb-4">
+          <div className="bg-sovereign-card rounded-2xl p-4 border border-glass-border/80 shadow-sovereign mb-4">
             <div className="flex items-center gap-3 justify-end">
               <div>
-                <h3 className="text-base font-extrabold text-gray-900">معلومات النشاط التجاري</h3>
-                <p className="text-xs text-gray-400 font-medium">أكمل المعلومات التالية لتقديم طلب الانضمام</p>
+                <h3 className="text-base font-extrabold text-text-primary">معلومات النشاط التجاري</h3>
+                <p className="text-xs text-text-tertiary font-medium">أكمل المعلومات التالية لتقديم طلب الانضمام</p>
               </div>
-              <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center">
-                <Shield size={18} className="text-red-600" />
+              <div className="w-10 h-10 bg-sovereign-card rounded-xl flex items-center justify-center">
+                <Shield size={18} className="text-neon" />
               </div>
             </div>
           </div>
 
           <div>
-            <label className="text-xs text-gray-500 font-semibold block text-right mb-1.5">اسم النشاط التجاري *</label>
+            <label className="text-xs text-text-secondary font-semibold block text-right mb-1.5">اسم النشاط التجاري *</label>
             <input required value={form.businessName} onChange={e => setForm({ ...form, businessName: e.target.value })} className={inputClass} placeholder="مثال: متجر الإلكترونيات" />
           </div>
           <div>
-            <label className="text-xs text-gray-500 font-semibold block text-right mb-1.5">نوع النشاط *</label>
+            <label className="text-xs text-text-secondary font-semibold block text-right mb-1.5">نوع النشاط *</label>
             <select required value={form.businessType} onChange={e => setForm({ ...form, businessType: e.target.value })} className={inputClass}>
               <option value="">اختر نوع النشاط</option>
               <option value="electronics">إلكترونيات</option>
@@ -228,7 +228,7 @@ export default function MerchantJoinPage() {
             </select>
           </div>
           <div>
-            <label className="text-xs text-gray-500 font-semibold block text-right mb-1.5">المدينة *</label>
+            <label className="text-xs text-text-secondary font-semibold block text-right mb-1.5">المدينة *</label>
             <select required value={form.city} onChange={e => setForm({ ...form, city: e.target.value })} className={inputClass}>
               <option value="">اختر المدينة</option>
               <option value="baghdad">بغداد</option>
@@ -244,20 +244,20 @@ export default function MerchantJoinPage() {
             </select>
           </div>
           <div>
-            <label className="text-xs text-gray-500 font-semibold block text-right mb-1.5">عنوان المحل *</label>
+            <label className="text-xs text-text-secondary font-semibold block text-right mb-1.5">عنوان المحل *</label>
             <input required value={form.businessAddress} onChange={e => setForm({ ...form, businessAddress: e.target.value })} className={inputClass} placeholder="العنوان التفصيلي" />
           </div>
           <div>
-            <label className="text-xs text-gray-500 font-semibold block text-right mb-1.5">رقم الهوية الوطنية *</label>
+            <label className="text-xs text-text-secondary font-semibold block text-right mb-1.5">رقم الهوية الوطنية *</label>
             <input required value={form.nationalId} onChange={e => setForm({ ...form, nationalId: e.target.value })} className={inputClass} placeholder="رقم الهوية" />
           </div>
           <div>
-            <label className="text-xs text-gray-500 font-semibold block text-right mb-1.5">وصف النشاط *</label>
-            <textarea required value={form.businessDescription} onChange={e => setForm({ ...form, businessDescription: e.target.value })} className="w-full h-28 bg-gray-50 rounded-2xl p-4 text-sm text-right outline-none border-2 border-gray-100 focus:border-red-400 focus:ring-4 focus:ring-red-50 focus:bg-white transition-all duration-300 resize-none" placeholder="صف نشاطك التجاري..." />
+            <label className="text-xs text-text-secondary font-semibold block text-right mb-1.5">وصف النشاط *</label>
+            <textarea required value={form.businessDescription} onChange={e => setForm({ ...form, businessDescription: e.target.value })} className="w-full h-28 bg-sovereign-surface rounded-2xl p-4 text-sm text-right outline-none border-2 border-glass-border focus:border-red-400 focus:ring-4 focus:ring-red-50 focus:bg-sovereign-card transition-all duration-300 resize-none" placeholder="صف نشاطك التجاري..." />
           </div>
 
           <div className="flex gap-3 pt-2">
-            <button type="button" onClick={() => setStep(1)} className="flex-1 bg-gray-100 text-gray-700 py-4 rounded-2xl font-bold hover:bg-gray-200 transition-all btn-press">
+            <button type="button" onClick={() => setStep(1)} className="flex-1 bg-sovereign-card text-text-primary py-4 rounded-2xl font-bold hover:bg-sovereign-border transition-all btn-press">
               رجوع
             </button>
             <button type="submit" disabled={isSubmitting} className="flex-1 gradient-primary text-white py-4 rounded-2xl font-bold shadow-glow-red btn-press disabled:opacity-60 flex items-center justify-center gap-2">

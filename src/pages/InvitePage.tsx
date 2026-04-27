@@ -17,14 +17,14 @@ export default function InvitePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white animate-fade-in">
+    <div className="min-h-screen bg-sovereign-card animate-fade-in">
       <div className="px-4 py-3 flex items-center justify-end border-b">
-        <button onClick={() => navigate(-1)}><ArrowRight size={24} className="text-gray-600" /></button>
+        <button onClick={() => navigate(-1)}><ArrowRight size={24} className="text-text-secondary" /></button>
       </div>
 
       <div className="px-6 pt-8 text-center">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">أرسل الكود الخاص بك واكسب النقاط</h1>
-        <p className="text-red-600 font-semibold mb-8">كيف تعمل؟</p>
+        <h1 className="text-2xl font-bold text-text-primary mb-2">أرسل الكود الخاص بك واكسب النقاط</h1>
+        <p className="text-neon font-semibold mb-8">كيف تعمل؟</p>
 
         <div className="space-y-3 mb-8">
           {[
@@ -33,23 +33,23 @@ export default function InvitePage() {
             'سوف تحصل على 250 نقطة من كل صديق',
             'سيحصل صديقك أيضًا على 500 نقطة مباشرة بعد إنشاء الحساب',
           ].map((step, i) => (
-            <div key={i} className="bg-gray-50 rounded-xl p-4 text-sm text-gray-700 text-right border border-gray-200">
+            <div key={i} className="bg-sovereign-surface rounded-xl p-4 text-sm text-text-primary text-right border border-sovereign-border">
               {step}
             </div>
           ))}
         </div>
 
-        <p className="text-lg font-bold text-gray-800 mb-3">رمز الدعوة</p>
-        <button onClick={handleCopy} className="inline-flex items-center gap-3 bg-gray-50 border-2 border-gray-200 rounded-xl px-8 py-3 mb-6">
-          <Copy size={20} className="text-gray-500" />
-          <span className="text-xl font-bold text-gray-800 tracking-wider">{code}</span>
+        <p className="text-lg font-bold text-text-primary mb-3">رمز الدعوة</p>
+        <button onClick={handleCopy} className="inline-flex items-center gap-3 bg-sovereign-surface border-2 border-sovereign-border rounded-xl px-8 py-3 mb-6">
+          <Copy size={20} className="text-text-secondary" />
+          <span className="text-xl font-bold text-text-primary tracking-wider">{code}</span>
         </button>
         {copied && <p className="text-green-600 text-sm mb-4">تم النسخ!</p>}
 
         <button className="w-full gradient-primary text-white py-4 rounded-xl font-bold text-base mb-3">
           مشاركة
         </button>
-        <p className="text-sm text-gray-500 font-medium">قائمة الدعوة</p>
+        <p className="text-sm text-text-secondary font-medium">قائمة الدعوة</p>
       </div>
     </div>
   );

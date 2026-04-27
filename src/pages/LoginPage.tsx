@@ -37,16 +37,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white animate-fade-in relative overflow-hidden">
+    <div className="min-h-screen bg-sovereign-card animate-fade-in relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-80 gradient-hero opacity-5 rounded-b-[60px]" />
-      <div className="absolute top-20 -left-20 w-40 h-40 bg-red-100/30 rounded-full blur-3xl" />
-      <div className="absolute top-40 -right-20 w-60 h-60 bg-red-50/50 rounded-full blur-3xl" />
+      <div className="absolute top-20 -left-20 w-40 h-40 bg-sovereign-card/30 rounded-full blur-3xl" />
+      <div className="absolute top-40 -right-20 w-60 h-60 bg-sovereign-card/50 rounded-full blur-3xl" />
 
       <div className="relative z-10">
         <div className="px-4 py-3 flex items-center justify-end">
-          <button onClick={() => navigate(-1)} className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-all btn-press">
-            <ArrowRight size={20} className="text-gray-600" />
+          <button onClick={() => navigate(-1)} className="w-10 h-10 bg-sovereign-surface rounded-xl flex items-center justify-center hover:bg-sovereign-card transition-all btn-press">
+            <ArrowRight size={20} className="text-text-secondary" />
           </button>
         </div>
 
@@ -56,8 +56,8 @@ export default function LoginPage() {
             <div className="w-20 h-20 gradient-primary rounded-3xl mx-auto flex items-center justify-center mb-4 shadow-glow-red rotate-3 hover:rotate-0 transition-transform duration-500">
               <span className="text-white text-3xl font-black">ع</span>
             </div>
-            <h1 className="text-2xl font-black text-gray-900">متجر العراق</h1>
-            <p className="text-gray-400 text-sm mt-1 font-medium">تسجيل الدخول للمتابعة</p>
+            <h1 className="text-2xl font-black text-text-primary">متجر العراق</h1>
+            <p className="text-text-tertiary text-sm mt-1 font-medium">تسجيل الدخول للمتابعة</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4 animate-slide-up">
@@ -67,10 +67,10 @@ export default function LoginPage() {
                 value={phone}
                 onChange={e => setPhone(e.target.value)}
                 placeholder="رقم الهاتف"
-                className="w-full h-14 bg-gray-50 rounded-2xl pr-12 pl-4 text-sm outline-none border-2 border-gray-100 focus:border-red-400 focus:ring-4 focus:ring-red-50 focus:bg-white transition-all duration-300"
+                className="w-full h-14 bg-sovereign-surface rounded-2xl pr-12 pl-4 text-sm outline-none border-2 border-glass-border focus:border-red-400 focus:ring-4 focus:ring-red-50 focus:bg-sovereign-card transition-all duration-300"
               />
-              <div className="absolute right-3.5 top-1/2 -translate-y-1/2 w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center group-focus-within:bg-red-100 transition-colors">
-                <Phone size={15} className="text-gray-400 group-focus-within:text-red-500 transition-colors" />
+              <div className="absolute right-3.5 top-1/2 -translate-y-1/2 w-7 h-7 bg-sovereign-card rounded-lg flex items-center justify-center group-focus-within:bg-sovereign-card transition-colors">
+                <Phone size={15} className="text-text-tertiary group-focus-within:text-error transition-colors" />
               </div>
             </div>
 
@@ -80,24 +80,24 @@ export default function LoginPage() {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 placeholder="كلمة المرور"
-                className="w-full h-14 bg-gray-50 rounded-2xl pr-12 pl-12 text-sm outline-none border-2 border-gray-100 focus:border-red-400 focus:ring-4 focus:ring-red-50 focus:bg-white transition-all duration-300"
+                className="w-full h-14 bg-sovereign-surface rounded-2xl pr-12 pl-12 text-sm outline-none border-2 border-glass-border focus:border-red-400 focus:ring-4 focus:ring-red-50 focus:bg-sovereign-card transition-all duration-300"
               />
-              <div className="absolute right-3.5 top-1/2 -translate-y-1/2 w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center group-focus-within:bg-red-100 transition-colors">
-                <Lock size={15} className="text-gray-400 group-focus-within:text-red-500 transition-colors" />
+              <div className="absolute right-3.5 top-1/2 -translate-y-1/2 w-7 h-7 bg-sovereign-card rounded-lg flex items-center justify-center group-focus-within:bg-sovereign-card transition-colors">
+                <Lock size={15} className="text-text-tertiary group-focus-within:text-error transition-colors" />
               </div>
-              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute left-3.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg flex items-center justify-center hover:bg-gray-100 transition-colors">
-                {showPass ? <EyeOff size={16} className="text-gray-400" /> : <Eye size={16} className="text-gray-400" />}
+              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute left-3.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg flex items-center justify-center hover:bg-sovereign-card transition-colors">
+                {showPass ? <EyeOff size={16} className="text-text-tertiary" /> : <Eye size={16} className="text-text-tertiary" />}
               </button>
             </div>
 
             {/* Admin Toggle */}
             <label className="flex items-center gap-3 justify-end cursor-pointer py-2 select-none">
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600 font-medium">تسجيل كمدير</span>
-                <Shield size={15} className={`transition-colors duration-300 ${isAdmin ? 'text-red-600' : 'text-gray-400'}`} />
+                <span className="text-sm text-text-secondary font-medium">تسجيل كمدير</span>
+                <Shield size={15} className={`transition-colors duration-300 ${isAdmin ? 'text-neon' : 'text-text-tertiary'}`} />
               </div>
-              <div className={`w-11 h-6 rounded-full transition-all duration-300 relative cursor-pointer ${isAdmin ? 'bg-red-600' : 'bg-gray-200'}`}>
-                <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition-all duration-300 shadow-sm ${isAdmin ? 'right-0.5' : 'right-[22px]'}`} />
+              <div className={`w-11 h-6 rounded-full transition-all duration-300 relative cursor-pointer ${isAdmin ? 'bg-neon' : 'bg-sovereign-border'}`}>
+                <div className={`w-5 h-5 bg-sovereign-card rounded-full absolute top-0.5 transition-all duration-300 shadow-sm ${isAdmin ? 'right-0.5' : 'right-[22px]'}`} />
               </div>
               <input type="checkbox" checked={isAdmin} onChange={e => setIsAdmin(e.target.checked)} className="hidden" />
             </label>
@@ -116,13 +116,13 @@ export default function LoginPage() {
           </form>
 
           <div className="text-center mt-6">
-            <button className="text-red-600 text-sm font-semibold hover:underline">نسيت كلمة المرور؟</button>
+            <button className="text-neon text-sm font-semibold hover:underline">نسيت كلمة المرور؟</button>
           </div>
 
           {/* Divider */}
           <div className="flex items-center gap-4 mt-8">
             <div className="flex-1 divider-gradient" />
-            <span className="text-xs text-gray-400 font-medium">أو</span>
+            <span className="text-xs text-text-tertiary font-medium">أو</span>
             <div className="flex-1 divider-gradient" />
           </div>
 
@@ -133,16 +133,16 @@ export default function LoginPage() {
               { icon: '🍎', label: 'Apple' },
               { icon: '📘', label: 'Facebook' },
             ].map(social => (
-              <button key={social.label} className="flex-1 h-12 bg-gray-50 rounded-xl flex items-center justify-center gap-2 border border-gray-100 hover:bg-gray-100 transition-all btn-press">
+              <button key={social.label} className="flex-1 h-12 bg-sovereign-surface rounded-xl flex items-center justify-center gap-2 border border-glass-border hover:bg-sovereign-card transition-all btn-press">
                 <span className="text-lg">{social.icon}</span>
               </button>
             ))}
           </div>
 
           <div className="text-center mt-8 pb-8">
-            <p className="text-gray-400 text-sm">
+            <p className="text-text-tertiary text-sm">
               ليس لديك حساب؟{' '}
-              <button onClick={() => navigate('/register')} className="text-red-600 font-bold hover:underline">إنشاء حساب</button>
+              <button onClick={() => navigate('/register')} className="text-neon font-bold hover:underline">إنشاء حساب</button>
             </p>
           </div>
         </div>

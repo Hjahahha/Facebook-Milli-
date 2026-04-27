@@ -8,11 +8,11 @@ export default function MyStorePage() {
   const hasMerchant = state.user?.role === 'merchant' && state.user?.merchantStatus === 'approved';
 
   return (
-    <div className="min-h-screen bg-white animate-fade-in">
+    <div className="min-h-screen bg-sovereign-card animate-fade-in">
       <div className="px-4 py-3 flex items-center justify-between border-b">
         <div />
         <h1 className="text-lg font-bold">متجري</h1>
-        <button onClick={() => navigate(-1)}><ArrowRight size={24} className="text-gray-600" /></button>
+        <button onClick={() => navigate(-1)}><ArrowRight size={24} className="text-text-secondary" /></button>
       </div>
 
       {hasMerchant ? (
@@ -23,10 +23,10 @@ export default function MyStorePage() {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-20 px-6">
-          <div className="w-24 h-24 bg-gray-100 rounded-2xl flex items-center justify-center mb-6">
-            <Store size={48} className="text-gray-300" />
+          <div className="w-24 h-24 bg-sovereign-card rounded-2xl flex items-center justify-center mb-6">
+            <Store size={48} className="text-text-tertiary" />
           </div>
-          <p className="text-gray-500 text-lg font-semibold mb-8">ليس لديك أي متجر</p>
+          <p className="text-text-secondary text-lg font-semibold mb-8">ليس لديك أي متجر</p>
           <button
             onClick={() => navigate('/merchant-join')}
             className="w-full gradient-primary text-white py-4 rounded-xl font-bold text-base flex items-center justify-center gap-2"

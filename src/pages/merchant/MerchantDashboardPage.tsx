@@ -52,11 +52,11 @@ export default function MerchantDashboardPage() {
               {isPremium ? (
                 <span className="bg-yellow-400 text-yellow-900 text-[10px] px-2 py-0.5 rounded-full font-bold">مميز</span>
               ) : (
-                <span className="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">عادي</span>
+                <span className="bg-sovereign-card/20 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">عادي</span>
               )}
             </div>
           </div>
-          <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+          <div className="w-14 h-14 bg-sovereign-card/20 rounded-full flex items-center justify-center">
             <span className="text-2xl">🏪</span>
           </div>
         </div>
@@ -64,7 +64,7 @@ export default function MerchantDashboardPage() {
 
       {/* Stats */}
       <div className="px-4 -mt-4">
-        <div className="bg-white rounded-xl shadow-sm p-4 grid grid-cols-4 gap-2 border border-gray-100">
+        <div className="bg-sovereign-card rounded-xl shadow-sm p-4 grid grid-cols-4 gap-2 border border-glass-border">
           {stats.map(stat => {
             const Icon = stat.icon;
             return (
@@ -72,8 +72,8 @@ export default function MerchantDashboardPage() {
                 <div className={`w-10 h-10 ${stat.color} rounded-lg flex items-center justify-center mx-auto mb-1`}>
                   <Icon size={18} />
                 </div>
-                <p className="text-sm font-bold text-gray-800">{stat.value}</p>
-                <p className="text-[10px] text-gray-500">{stat.label}</p>
+                <p className="text-sm font-bold text-text-primary">{stat.value}</p>
+                <p className="text-[10px] text-text-secondary">{stat.label}</p>
               </div>
             );
           })}
@@ -82,7 +82,7 @@ export default function MerchantDashboardPage() {
 
       {/* Add Product Button */}
       <div className="px-4 mt-4">
-        <button className="w-full bg-white border-2 border-dashed border-red-300 text-red-600 py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-red-50 transition-all">
+        <button className="w-full bg-sovereign-card border-2 border-dashed border-neon/30 text-neon py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-sovereign-card transition-all">
           <span>إضافة منتج جديد</span>
           <PlusCircle size={20} />
         </button>
@@ -90,15 +90,15 @@ export default function MerchantDashboardPage() {
 
       {/* Standard Features */}
       <div className="px-4 mt-6">
-        <h3 className="text-sm font-bold text-gray-800 mb-3 text-right">الميزات الأساسية</h3>
+        <h3 className="text-sm font-bold text-text-primary mb-3 text-right">الميزات الأساسية</h3>
         <div className="grid grid-cols-2 gap-3">
           {standardFeatures.map(f => {
             const Icon = f.icon;
             return (
-              <button key={f.label} onClick={() => navigate(f.path)} className="bg-white rounded-xl p-4 text-right shadow-sm border border-gray-100 hover:shadow-md transition-all">
-                <Icon size={24} className="text-red-600 mb-2" />
-                <p className="text-sm font-semibold text-gray-800">{f.label}</p>
-                <p className="text-[10px] text-gray-500 mt-0.5">{f.desc}</p>
+              <button key={f.label} onClick={() => navigate(f.path)} className="bg-sovereign-card rounded-xl p-4 text-right shadow-sm border border-glass-border hover:shadow-md transition-all">
+                <Icon size={24} className="text-neon mb-2" />
+                <p className="text-sm font-semibold text-text-primary">{f.label}</p>
+                <p className="text-[10px] text-text-secondary mt-0.5">{f.desc}</p>
               </button>
             );
           })}
@@ -107,7 +107,7 @@ export default function MerchantDashboardPage() {
 
       {/* Premium Features */}
       <div className="px-4 mt-6">
-        <h3 className="text-sm font-bold text-gray-800 mb-3 text-right flex items-center gap-2 justify-end">
+        <h3 className="text-sm font-bold text-text-primary mb-3 text-right flex items-center gap-2 justify-end">
           <span>ميزات الباقة المميزة</span>
           <Star size={16} className="text-yellow-500 fill-yellow-500" />
         </h3>
@@ -120,7 +120,7 @@ export default function MerchantDashboardPage() {
                 key={f.label}
                 onClick={() => isPremium ? navigate(f.path) : null}
                 className={`rounded-xl p-4 text-right shadow-sm border transition-all relative ${
-                  isLocked ? 'bg-gray-50 border-gray-200 opacity-60' : 'bg-white border-gray-100 hover:shadow-md'
+                  isLocked ? 'bg-sovereign-surface border-sovereign-border opacity-60' : 'bg-sovereign-card border-glass-border hover:shadow-md'
                 }`}
               >
                 {isLocked && (
@@ -128,9 +128,9 @@ export default function MerchantDashboardPage() {
                     مميز
                   </div>
                 )}
-                <Icon size={24} className={isLocked ? 'text-gray-400 mb-2' : 'text-yellow-600 mb-2'} />
-                <p className="text-sm font-semibold text-gray-800">{f.label}</p>
-                <p className="text-[10px] text-gray-500 mt-0.5">{f.desc}</p>
+                <Icon size={24} className={isLocked ? 'text-text-tertiary mb-2' : 'text-yellow-600 mb-2'} />
+                <p className="text-sm font-semibold text-text-primary">{f.label}</p>
+                <p className="text-[10px] text-text-secondary mt-0.5">{f.desc}</p>
               </button>
             );
           })}
@@ -142,7 +142,7 @@ export default function MerchantDashboardPage() {
           <div className="gradient-gold rounded-xl p-5 text-center text-white">
             <h3 className="font-bold text-lg mb-2">ترقية للباقة المميزة</h3>
             <p className="text-sm opacity-90 mb-4">احصل على جميع الميزات المتقدمة مقابل 99,000 دينار فقط</p>
-            <button onClick={() => navigate('/merchant-join')} className="bg-white text-yellow-700 px-8 py-2.5 rounded-xl font-bold text-sm">
+            <button onClick={() => navigate('/merchant-join')} className="bg-sovereign-card text-yellow-700 px-8 py-2.5 rounded-xl font-bold text-sm">
               ترقية الآن
             </button>
           </div>
