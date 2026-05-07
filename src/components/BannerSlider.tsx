@@ -8,6 +8,12 @@ export default function BannerSlider() {
   const [current, setCurrent] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  useEffect(() => {
+    if (current >= activeAds.length && activeAds.length > 0) {
+      setCurrent(0);
+    }
+  }, [activeAds.length, current]);
+
   const goTo = useCallback((index: number) => {
     if (isTransitioning) return;
     setIsTransitioning(true);
