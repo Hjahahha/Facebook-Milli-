@@ -25,7 +25,7 @@ export default function SearchPage() {
             onKeyDown={e => {
               if (e.key === 'Enter') {
                 const val = (e.target as HTMLInputElement).value;
-                navigate(`/search?q=${val}`);
+                navigate(`/search?q=${encodeURIComponent(val)}`);
               }
             }}
           />

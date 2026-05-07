@@ -36,7 +36,7 @@ export default function NotificationsPage() {
               key={notif.id}
               onClick={() => dispatch({ type: 'MARK_NOTIFICATION_READ', payload: notif.id })}
               className={`w-full px-4 py-4 flex items-start gap-3 text-right transition-all ${
-                notif.read ? 'bg-sovereign-card' : 'bg-sovereign-card'
+                notif.read ? 'bg-sovereign-card' : 'bg-sovereign-surface'
               }`}
             >
               <div className="flex-1">

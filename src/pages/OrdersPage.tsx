@@ -6,7 +6,8 @@ import { formatPrice, formatDate, getStatusText } from '../utils/helpers';
 function getStatusInfo(status: string) {
   switch (status) {
     case 'pending': return { color: 'bg-amber-50 text-amber-700 border-amber-200', icon: Clock, iconColor: 'text-amber-500' };
-    case 'processing': return { color: 'bg-blue-50 text-blue-700 border-blue-200', icon: Truck, iconColor: 'text-blue-500' };
+    case 'confirmed': return { color: 'bg-blue-50 text-blue-700 border-blue-200', icon: CheckCircle, iconColor: 'text-blue-500' };
+    case 'shipped': return { color: 'bg-indigo-50 text-indigo-700 border-indigo-200', icon: Truck, iconColor: 'text-indigo-500' };
     case 'delivered': return { color: 'bg-emerald-50 text-emerald-700 border-emerald-200', icon: CheckCircle, iconColor: 'text-emerald-500' };
     case 'cancelled': return { color: 'bg-sovereign-card text-red-700 border-red-200', icon: XCircle, iconColor: 'text-error' };
     default: return { color: 'bg-sovereign-surface text-text-primary border-sovereign-border', icon: Clock, iconColor: 'text-text-secondary' };

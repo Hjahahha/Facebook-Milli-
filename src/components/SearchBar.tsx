@@ -35,7 +35,7 @@ export default function SearchBar() {
           placeholder="ابحث عن المنتجات..."
           value={state.searchQuery}
           onChange={e => dispatch({ type: 'SET_SEARCH', payload: e.target.value })}
-          onKeyDown={e => e.key === 'Enter' && state.searchQuery && navigate(`/search?q=${state.searchQuery}`)}
+          onKeyDown={e => e.key === 'Enter' && state.searchQuery && navigate(`/search?q=${encodeURIComponent(state.searchQuery)}`)}
           className="w-full h-10 rounded-xl pr-4 pl-10 text-sm outline-none transition-all duration-200"
           style={{
             background: '#111',

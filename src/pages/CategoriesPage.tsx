@@ -61,8 +61,8 @@ export default function CategoriesPage() {
         <div className="flex-1 bg-sovereign-card p-4 overflow-y-auto">
           {activeCat && (
             <div className="animate-fade-in">
-              {activeCat.subcategories.map((sub, groupIndex) => (
-                <div key={sub.id} className="mb-6">
+              {Array.from({ length: Math.ceil(activeCat.subcategories.length / 3) }).map((_, groupIndex) => (
+                <div key={groupIndex} className="mb-6">
                   {groupIndex === 0 && (
                     <h3 className="text-sm font-bold text-text-primary mb-3 text-right">
                       {activeCat.name}
