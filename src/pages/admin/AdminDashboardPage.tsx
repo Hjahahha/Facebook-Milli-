@@ -270,6 +270,7 @@ function ProductsTab() {
 
   const handleAddProduct = () => {
     if (!newProduct.name || !newProduct.price) return;
+    const existingProduct = editingId ? state.products.find(p => p.id === editingId) : null;
     const product = {
       id: editingId || generateId(),
       name: newProduct.name,
@@ -279,12 +280,13 @@ function ProductsTab() {
       image: newProduct.image || 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=300',
       category: newProduct.category || 'other',
       description: newProduct.description,
-      merchantId: 'admin',
-      merchantName: state.appSettings.appName,
-      rating: 5,
-      reviewCount: 0,
-      inStock: true,
-      createdAt: new Date().toISOString(),
+      merchantId: existingProduct?.merchantId || 'admin',
+      merchantName: existingProduct?.merchantName || state.appSettings.appName,
+      rating: existingProduct?.rating ?? 5,
+      reviewCount: existingProduct?.reviewCount ?? 0,
+      inStock: existingProduct?.inStock ?? true,
+      featured: existingProduct?.featured,
+      createdAt: existingProduct?.createdAt || new Date().toISOString(),
     };
     if (editingId) {
       dispatch({ type: 'UPDATE_PRODUCT', payload: product });

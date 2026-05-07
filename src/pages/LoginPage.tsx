@@ -2,11 +2,20 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../store/AppContext';
 import { ArrowRight, Phone, Lock, Eye, EyeOff, Shield } from 'lucide-react';
-import { generateId } from '../utils/helpers';
+
+function phoneToId(phone: string): string {
+  let hash = 0;
+  const str = 'user-' + phone;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return 'u' + Math.abs(hash).toString(36);
+}
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { dispatch } = useApp();
+  const { state, dispatch } = useApp();
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
@@ -18,18 +27,22 @@ export default function LoginPage() {
     setIsLoading(true);
 
     setTimeout(() => {
+      const phoneNum = phone || '07506747685';
+      const existingUser = state.user && state.user.phone === phoneNum ? state.user : null;
       const user = {
-        id: generateId(),
-        name: isAdmin ? 'مدير التطبيق' : 'متجر العراق',
-        phone: phone || '07506747685',
-        email: '',
-        points: 100,
-        walletBalance: 0,
-        inviteCode: 'IY4Z-ENWI',
+        id: existingUser?.id || phoneToId(phoneNum),
+        name: existingUser?.name || (isAdmin ? 'مدير التطبيق' : 'متجر العراق'),
+        phone: phoneNum,
+        email: existingUser?.email || '',
+        points: existingUser?.points ?? 100,
+        walletBalance: existingUser?.walletBalance ?? 0,
+        inviteCode: existingUser?.inviteCode || 'IY4Z-ENWI',
         role: isAdmin ? 'admin' as const : 'user' as const,
-        gender: 'male' as const,
-        location: 'الانبار/ مركز الانبار',
-        createdAt: new Date().toISOString(),
+        gender: existingUser?.gender || 'male' as const,
+        location: existingUser?.location || 'الانبار/ مركز الانبار',
+        createdAt: existingUser?.createdAt || new Date().toISOString(),
+        ...(existingUser?.avatar ? { avatar: existingUser.avatar } : {}),
+        ...(existingUser?.merchantTier ? { merchantTier: existingUser.merchantTier } : {}),
       };
       dispatch({ type: 'LOGIN', payload: user });
       navigate('/');

@@ -4,6 +4,16 @@ import { useApp } from '../store/AppContext';
 import { ArrowRight, User, Phone, Lock, Mail, MapPin } from 'lucide-react';
 import { generateId } from '../utils/helpers';
 
+function phoneToId(phone: string): string {
+  let hash = 0;
+  const str = 'user-' + phone;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return 'u' + Math.abs(hash).toString(36);
+}
+
 export default function RegisterPage() {
   const navigate = useNavigate();
   const { dispatch } = useApp();
@@ -11,10 +21,11 @@ export default function RegisterPage() {
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
+    const phoneNum = form.phone || '07500000000';
     const user = {
-      id: generateId(),
+      id: phoneToId(phoneNum),
       name: form.name || 'مستخدم جديد',
-      phone: form.phone || '07500000000',
+      phone: phoneNum,
       email: form.email,
       points: 500,
       walletBalance: 0,

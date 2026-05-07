@@ -36,6 +36,7 @@ export default function MerchantDashboardPage() {
 
   const handleSaveProduct = () => {
     if (!newProduct.name || !newProduct.price) return;
+    const existingProduct = editingProductId ? state.products.find(p => p.id === editingProductId) : null;
     const product = {
       id: editingProductId || generateId(),
       name: newProduct.name,
@@ -45,12 +46,13 @@ export default function MerchantDashboardPage() {
       image: newProduct.image || 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=300',
       category: newProduct.category || 'other',
       description: newProduct.description,
-      merchantId: state.user?.id || 'merchant',
-      merchantName: state.user?.name || 'تاجر',
-      rating: 5,
-      reviewCount: 0,
-      inStock: true,
-      createdAt: new Date().toISOString(),
+      merchantId: existingProduct?.merchantId || state.user?.id || 'merchant',
+      merchantName: existingProduct?.merchantName || state.user?.name || 'تاجر',
+      rating: existingProduct?.rating ?? 5,
+      reviewCount: existingProduct?.reviewCount ?? 0,
+      inStock: existingProduct?.inStock ?? true,
+      featured: existingProduct?.featured,
+      createdAt: existingProduct?.createdAt || new Date().toISOString(),
     };
     if (editingProductId) {
       dispatch({ type: 'UPDATE_PRODUCT', payload: product });
