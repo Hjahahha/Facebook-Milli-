@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { Product, User, CartItem, Order, Address, MerchantApplication, Ad, Message, Category, Notification, Transaction, DailyReward } from '../types';
 import { sampleProducts, sampleCategories, sampleAds } from '../utils/sampleData';
@@ -20,6 +20,17 @@ interface AppState {
   transactions: Transaction[];
   dailyRewards: DailyReward[];
   searchQuery: string;
+  appSettings: AppSettings;
+}
+
+interface AppSettings {
+  appName: string;
+  currency: string;
+  deliveryFee: string;
+  minOrderAmount: string;
+  whatsappNumber: string;
+  email: string;
+  location: string;
 }
 
 type Action =
@@ -39,21 +50,38 @@ type Action =
   | { type: 'ADD_AD'; payload: Ad }
   | { type: 'REMOVE_AD'; payload: string }
   | { type: 'TOGGLE_AD'; payload: string }
+  | { type: 'UPDATE_AD'; payload: Ad }
   | { type: 'ADD_PRODUCT'; payload: Product }
   | { type: 'REMOVE_PRODUCT'; payload: string }
+  | { type: 'UPDATE_PRODUCT'; payload: Product }
   | { type: 'ADD_CATEGORY'; payload: Category }
   | { type: 'REMOVE_CATEGORY'; payload: string }
+  | { type: 'UPDATE_CATEGORY'; payload: Category }
   | { type: 'SEND_MESSAGE'; payload: Message }
   | { type: 'MARK_MESSAGE_READ'; payload: string }
   | { type: 'ADD_NOTIFICATION'; payload: Notification }
   | { type: 'MARK_NOTIFICATION_READ'; payload: string }
+  | { type: 'CLEAR_NOTIFICATIONS' }
   | { type: 'ADD_TRANSACTION'; payload: Transaction }
   | { type: 'COLLECT_DAILY_REWARD'; payload: number }
   | { type: 'SET_SEARCH'; payload: string }
   | { type: 'ADD_BALANCE'; payload: number }
-  | { type: 'UPDATE_ORDER_STATUS'; payload: { orderId: string; status: Order['status'] } };
+  | { type: 'UPDATE_ORDER_STATUS'; payload: { orderId: string; status: Order['status'] } }
+  | { type: 'UPDATE_SETTINGS'; payload: Partial<AppSettings> }
+  | { type: 'CANCEL_ORDER'; payload: string }
+  | { type: 'DELETE_USER_ACCOUNT' };
 
-const initialState: AppState = {
+const defaultSettings: AppSettings = {
+  appName: 'متجر العراق',
+  currency: 'دينار عراقي (IQD)',
+  deliveryFee: 'مجاني',
+  minOrderAmount: '10,000 دينار',
+  whatsappNumber: '+9647506747685',
+  email: 'admin@iraqstore.com',
+  location: 'بغداد، العراق',
+};
+
+const defaultState: AppState = {
   user: null,
   isLoggedIn: false,
   isAdmin: false,
@@ -77,14 +105,42 @@ const initialState: AppState = {
     { day: 3, points: 750, collected: false, available: false },
   ],
   searchQuery: '',
+  appSettings: defaultSettings,
 };
+
+function loadState(): AppState {
+  try {
+    const saved = localStorage.getItem('iraq-store-state');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return {
+        ...defaultState,
+        ...parsed,
+        searchQuery: '',
+        appSettings: { ...defaultSettings, ...(parsed.appSettings || {}) },
+      };
+    }
+  } catch {
+    // ignore parse errors
+  }
+  return defaultState;
+}
+
+function saveState(state: AppState) {
+  try {
+    const toSave = { ...state, searchQuery: '' };
+    localStorage.setItem('iraq-store-state', JSON.stringify(toSave));
+  } catch {
+    // ignore quota errors
+  }
+}
 
 function appReducer(state: AppState, action: Action): AppState {
   switch (action.type) {
     case 'LOGIN':
       return { ...state, user: action.payload, isLoggedIn: true, isAdmin: action.payload.role === 'admin' };
     case 'LOGOUT':
-      return { ...state, user: null, isLoggedIn: false, isAdmin: false };
+      return { ...state, user: null, isLoggedIn: false, isAdmin: false, cart: [], favorites: [] };
     case 'UPDATE_USER':
       return { ...state, user: state.user ? { ...state.user, ...action.payload } : null };
     case 'ADD_TO_CART': {
@@ -123,14 +179,20 @@ function appReducer(state: AppState, action: Action): AppState {
       return { ...state, ads: state.ads.filter(ad => ad.id !== action.payload) };
     case 'TOGGLE_AD':
       return { ...state, ads: state.ads.map(ad => ad.id === action.payload ? { ...ad, active: !ad.active } : ad) };
+    case 'UPDATE_AD':
+      return { ...state, ads: state.ads.map(ad => ad.id === action.payload.id ? action.payload : ad) };
     case 'ADD_PRODUCT':
       return { ...state, products: [...state.products, action.payload] };
     case 'REMOVE_PRODUCT':
       return { ...state, products: state.products.filter(p => p.id !== action.payload) };
+    case 'UPDATE_PRODUCT':
+      return { ...state, products: state.products.map(p => p.id === action.payload.id ? action.payload : p) };
     case 'ADD_CATEGORY':
       return { ...state, categories: [...state.categories, action.payload] };
     case 'REMOVE_CATEGORY':
       return { ...state, categories: state.categories.filter(c => c.id !== action.payload) };
+    case 'UPDATE_CATEGORY':
+      return { ...state, categories: state.categories.map(c => c.id === action.payload.id ? action.payload : c) };
     case 'SEND_MESSAGE':
       return { ...state, messages: [...state.messages, action.payload] };
     case 'MARK_MESSAGE_READ':
@@ -139,10 +201,12 @@ function appReducer(state: AppState, action: Action): AppState {
       return { ...state, notifications: [action.payload, ...state.notifications] };
     case 'MARK_NOTIFICATION_READ':
       return { ...state, notifications: state.notifications.map(n => n.id === action.payload ? { ...n, read: true } : n) };
+    case 'CLEAR_NOTIFICATIONS':
+      return { ...state, notifications: [] };
     case 'ADD_TRANSACTION':
       return { ...state, transactions: [action.payload, ...state.transactions] };
     case 'COLLECT_DAILY_REWARD': {
-      const newRewards = state.dailyRewards.map((r, i) => {
+      const newRewards = state.dailyRewards.map((r) => {
         if (r.day === action.payload) return { ...r, collected: true };
         if (r.day === action.payload + 1) return { ...r, available: true };
         return r;
@@ -160,6 +224,12 @@ function appReducer(state: AppState, action: Action): AppState {
       return { ...state, user: state.user ? { ...state.user, walletBalance: state.user.walletBalance + action.payload } : null };
     case 'UPDATE_ORDER_STATUS':
       return { ...state, orders: state.orders.map(o => o.id === action.payload.orderId ? { ...o, status: action.payload.status } : o) };
+    case 'UPDATE_SETTINGS':
+      return { ...state, appSettings: { ...state.appSettings, ...action.payload } };
+    case 'CANCEL_ORDER':
+      return { ...state, orders: state.orders.map(o => o.id === action.payload ? { ...o, status: 'cancelled' } : o) };
+    case 'DELETE_USER_ACCOUNT':
+      return { ...state, user: null, isLoggedIn: false, isAdmin: false, cart: [], favorites: [], orders: [], addresses: [] };
     default:
       return state;
   }
@@ -168,7 +238,12 @@ function appReducer(state: AppState, action: Action): AppState {
 const AppContext = createContext<{ state: AppState; dispatch: React.Dispatch<Action> } | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(appReducer, initialState);
+  const [state, dispatch] = useReducer(appReducer, undefined, loadState);
+
+  useEffect(() => {
+    saveState(state);
+  }, [state]);
+
   return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>;
 }
 
