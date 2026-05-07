@@ -46,6 +46,8 @@ export default function MerchantJoinPage() {
     if (!state.user) { navigate('/login'); return; }
     setIsSubmitting(true);
 
+    sendWhatsAppNotification(form.businessName, selectedTier, state.user!.phone);
+
     setTimeout(() => {
       const application = {
         id: generateId(),
@@ -69,7 +71,6 @@ export default function MerchantJoinPage() {
         id: generateId(), title: 'طلب انضمام تاجر', message: `تم تقديم طلبك للانضمام كتاجر ${selectedTier === 'premium' ? 'مميز' : 'عادي'}. سيتم مراجعة طلبك خلال 24 ساعة.`, type: 'merchant', read: false, createdAt: new Date().toISOString(),
       }});
 
-      sendWhatsAppNotification(form.businessName, selectedTier, state.user!.phone);
       navigate('/merchant-success');
     }, 800);
   };

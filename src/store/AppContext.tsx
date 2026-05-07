@@ -144,7 +144,7 @@ function appReducer(state: AppState, action: Action): AppState {
     case 'COLLECT_DAILY_REWARD': {
       const newRewards = state.dailyRewards.map((r, i) => {
         if (r.day === action.payload) return { ...r, collected: true };
-        if (i === action.payload) return { ...r, available: true };
+        if (r.day === action.payload + 1) return { ...r, available: true };
         return r;
       });
       const reward = state.dailyRewards.find(r => r.day === action.payload);

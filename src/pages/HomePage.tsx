@@ -12,7 +12,14 @@ export default function HomePage() {
   const { state } = useApp();
   const navigate = useNavigate();
   const featuredProducts = state.products.filter(p => p.featured);
-  const tabs = ['الصفحة الرئيسية', 'إلكترونيات', 'الملابس', 'كوزمتك', 'المنزل', 'ألعاب'];
+  const tabs = [
+    { label: 'الصفحة الرئيسية', categoryId: null },
+    { label: 'إلكترونيات', categoryId: 'electronics' },
+    { label: 'الملابس', categoryId: 'fashion' },
+    { label: 'كوزمتك', categoryId: 'beauty' },
+    { label: 'المنزل', categoryId: 'home' },
+    { label: 'ألعاب', categoryId: 'gaming' },
+  ];
 
   return (
     <div className="pb-24 animate-fade-in" style={{ background: '#050505' }}>
@@ -24,8 +31,8 @@ export default function HomePage() {
         <div className="flex gap-2 overflow-x-auto hide-scrollbar">
           {tabs.map((tab, i) => (
             <button
-              key={tab}
-              onClick={() => i > 0 ? navigate(`/category/${state.categories[i - 1]?.id || 'electronics'}`) : null}
+              key={tab.label}
+              onClick={() => tab.categoryId ? navigate(`/category/${tab.categoryId}`) : undefined}
               className="whitespace-nowrap px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 btn-press"
               style={{
                 background: i === 0 ? 'rgba(0,212,255,0.15)' : '#111',
@@ -33,7 +40,7 @@ export default function HomePage() {
                 border: `1px solid ${i === 0 ? 'rgba(0,212,255,0.3)' : 'rgba(255,255,255,0.06)'}`,
               }}
             >
-              {tab}
+              {tab.label}
             </button>
           ))}
         </div>
