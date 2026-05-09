@@ -18,7 +18,7 @@ export default function MerchantDashboardPage() {
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
   const [newProduct, setNewProduct] = useState({ name: '', price: '', category: '', description: '', image: '', originalPrice: '', discount: '' });
 
-  const merchantProducts = state.products.filter(p => p.merchantId === state.user?.id || p.merchantId === 'admin');
+  const merchantProducts = state.products.filter(p => p.merchantId === state.user?.id);
   const merchantOrders = state.orders;
   const totalSales = merchantOrders.reduce((sum, o) => sum + o.total, 0);
 

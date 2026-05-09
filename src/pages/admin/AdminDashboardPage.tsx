@@ -543,14 +543,15 @@ function AdsTab() {
 
   const handleAddAd = () => {
     if (!newAd.title) return;
+    const existingAd = editingId ? state.ads.find(a => a.id === editingId) : null;
     const ad = {
       id: editingId || generateId(),
       title: newAd.title,
       image: newAd.image || 'https://images.unsplash.com/photo-1607082349566-187342175e2f?w=800',
       link: newAd.link,
-      active: true,
+      active: existingAd?.active ?? true,
       position: newAd.position,
-      createdAt: new Date().toISOString(),
+      createdAt: existingAd?.createdAt || new Date().toISOString(),
     };
     if (editingId) {
       dispatch({ type: 'UPDATE_AD', payload: ad });
