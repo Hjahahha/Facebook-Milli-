@@ -27,8 +27,11 @@ export default function CartPage() {
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'wallet'>('cash');
   const [showCityDropdown, setShowCityDropdown] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [walletError, setWalletError] = useState('');
 
+  const walletBalance = state.user?.walletBalance || 0;
   const canPlaceOrder = customerName && customerPhone && city && area && fullAddress;
+  const insufficientWallet = paymentMethod === 'wallet' && walletBalance < total;
 
   const handlePlaceOrder = () => {
     if (!state.isLoggedIn) {
@@ -37,8 +40,15 @@ export default function CartPage() {
     }
     if (!canPlaceOrder) return;
 
+    if (paymentMethod === 'wallet' && walletBalance < total) {
+      setWalletError(`رصيد المحفظة غير كافٍ. الرصيد: ${formatPrice(walletBalance)} — المطلوب: ${formatPrice(total)}`);
+      return;
+    }
+    setWalletError('');
+
+    const orderId = generateId();
     const order = {
-      id: generateId(),
+      id: orderId,
       items: [...state.cart],
       total,
       status: 'pending' as const,
@@ -59,12 +69,27 @@ export default function CartPage() {
     };
     dispatch({ type: 'ADD_ORDER', payload: order });
     dispatch({ type: 'CLEAR_CART' });
+
+    if (paymentMethod === 'wallet') {
+      dispatch({ type: 'ADD_BALANCE', payload: -total });
+      dispatch({
+        type: 'ADD_TRANSACTION',
+        payload: {
+          id: generateId(),
+          type: 'debit',
+          amount: total,
+          description: `دفع طلب #${orderId.slice(0, 6)}`,
+          date: new Date().toISOString(),
+        },
+      });
+    }
+
     dispatch({
       type: 'ADD_NOTIFICATION',
       payload: {
         id: generateId(),
         title: 'تم تأكيد طلبك',
-        message: `طلبك #${order.id.slice(0, 6)} قيد المعالجة. سيتم التوصيل إلى ${city} - ${area}`,
+        message: `طلبك #${orderId.slice(0, 6)} قيد المعالجة. سيتم التوصيل إلى ${city} - ${area}`,
         type: 'order',
         read: false,
         createdAt: new Date().toISOString(),
@@ -295,15 +320,27 @@ export default function CartPage() {
             </div>
           </div>
 
+          {/* Wallet Error */}
+          {walletError && (
+            <div className="rounded-xl px-4 py-3 text-xs text-right font-medium" style={{ background: 'rgba(255,23,68,0.1)', border: '1px solid rgba(255,23,68,0.2)', color: '#FF1744' }}>
+              {walletError}
+            </div>
+          )}
+          {insufficientWallet && (
+            <div className="rounded-xl px-4 py-2 text-[11px] text-right" style={{ background: 'rgba(255,215,0,0.08)', border: '1px solid rgba(255,215,0,0.15)', color: '#FFD700' }}>
+              رصيد المحفظة: {formatPrice(walletBalance)} — المطلوب: {formatPrice(total)}
+            </div>
+          )}
+
           {/* Place Order */}
           <button
             onClick={handlePlaceOrder}
-            disabled={!canPlaceOrder}
+            disabled={!canPlaceOrder || insufficientWallet}
             className="w-full py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2 transition-all"
             style={{
-              background: canPlaceOrder ? 'linear-gradient(135deg, #00D4FF, #0088CC)' : '#222',
-              color: canPlaceOrder ? '#fff' : '#555',
-              opacity: canPlaceOrder ? 1 : 0.6,
+              background: canPlaceOrder && !insufficientWallet ? 'linear-gradient(135deg, #00D4FF, #0088CC)' : '#222',
+              color: canPlaceOrder && !insufficientWallet ? '#fff' : '#555',
+              opacity: canPlaceOrder && !insufficientWallet ? 1 : 0.6,
             }}
           >
             <span>تأكيد الطلب</span>

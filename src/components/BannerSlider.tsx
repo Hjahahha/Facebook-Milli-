@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useApp } from '../store/AppContext';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -7,6 +7,7 @@ export default function BannerSlider() {
   const activeAds = state.ads.filter(ad => ad.active && ad.position === 'banner');
   const [current, setCurrent] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const transitionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (current >= activeAds.length && activeAds.length > 0) {
@@ -14,11 +15,18 @@ export default function BannerSlider() {
     }
   }, [activeAds.length, current]);
 
+  useEffect(() => {
+    return () => {
+      if (transitionTimer.current) clearTimeout(transitionTimer.current);
+    };
+  }, []);
+
   const goTo = useCallback((index: number) => {
     if (isTransitioning) return;
     setIsTransitioning(true);
     setCurrent(index);
-    setTimeout(() => setIsTransitioning(false), 500);
+    if (transitionTimer.current) clearTimeout(transitionTimer.current);
+    transitionTimer.current = setTimeout(() => setIsTransitioning(false), 500);
   }, [isTransitioning]);
 
   useEffect(() => {
