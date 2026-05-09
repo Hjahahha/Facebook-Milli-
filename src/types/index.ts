@@ -78,6 +78,85 @@ export interface Order {
   status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
   createdAt: string;
   address: Address;
+  customerName?: string;
+  customerPhone?: string;
+  customerNotes?: string;
+  paymentMethod?: 'cash' | 'wallet';
+}
+
+export interface CarListing {
+  id: string;
+  title: string;
+  price: number;
+  location: string;
+  km: string;
+  fuel: string;
+  year: string;
+  condition: string;
+  make: string;
+  model: string;
+  color: string;
+  description: string;
+  image: string;
+  images: string[];
+  sellerName: string;
+  sellerPhone: string;
+  promoted: boolean;
+  createdAt: string;
+  userId: string;
+}
+
+export interface PropertyListing {
+  id: string;
+  title: string;
+  price: number;
+  type: string;
+  purpose: string;
+  area: string;
+  beds: number;
+  baths: number;
+  location: string;
+  description: string;
+  image: string;
+  images: string[];
+  ownerName: string;
+  ownerPhone: string;
+  promoted: boolean;
+  createdAt: string;
+  userId: string;
+  furnished: boolean;
+  floor?: number;
+}
+
+export interface ServiceProvider {
+  id: string;
+  name: string;
+  specialty: string;
+  rating: number;
+  jobs: number;
+  responseTime: string;
+  verified: boolean;
+  phone: string;
+  location: string;
+  description: string;
+  image: string;
+  autoReply: boolean;
+  price: string;
+  createdAt: string;
+  userId: string;
+}
+
+export interface ServiceRequest {
+  id: string;
+  providerId: string;
+  providerName: string;
+  customerName: string;
+  customerPhone: string;
+  description: string;
+  location: string;
+  status: 'pending' | 'accepted' | 'completed' | 'cancelled';
+  createdAt: string;
+  userId: string;
 }
 
 export interface Address {

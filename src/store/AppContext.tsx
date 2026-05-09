@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import type { Product, User, CartItem, Order, Address, MerchantApplication, Ad, Message, Category, Notification, Transaction, DailyReward } from '../types';
+import type { Product, User, CartItem, Order, Address, MerchantApplication, Ad, Message, Category, Notification, Transaction, DailyReward, CarListing, PropertyListing, ServiceProvider, ServiceRequest } from '../types';
 import { sampleProducts, sampleCategories, sampleAds } from '../utils/sampleData';
+import { sampleCars, sampleProperties, sampleServiceProviders } from '../utils/sampleListings';
 
 interface AppState {
   user: User | null;
@@ -21,6 +22,10 @@ interface AppState {
   dailyRewards: DailyReward[];
   searchQuery: string;
   appSettings: AppSettings;
+  carListings: CarListing[];
+  propertyListings: PropertyListing[];
+  serviceProviders: ServiceProvider[];
+  serviceRequests: ServiceRequest[];
 }
 
 interface AppSettings {
@@ -69,7 +74,18 @@ type Action =
   | { type: 'UPDATE_ORDER_STATUS'; payload: { orderId: string; status: Order['status'] } }
   | { type: 'UPDATE_SETTINGS'; payload: Partial<AppSettings> }
   | { type: 'CANCEL_ORDER'; payload: string }
-  | { type: 'DELETE_USER_ACCOUNT' };
+  | { type: 'DELETE_USER_ACCOUNT' }
+  | { type: 'ADD_CAR_LISTING'; payload: CarListing }
+  | { type: 'REMOVE_CAR_LISTING'; payload: string }
+  | { type: 'UPDATE_CAR_LISTING'; payload: CarListing }
+  | { type: 'ADD_PROPERTY_LISTING'; payload: PropertyListing }
+  | { type: 'REMOVE_PROPERTY_LISTING'; payload: string }
+  | { type: 'UPDATE_PROPERTY_LISTING'; payload: PropertyListing }
+  | { type: 'ADD_SERVICE_PROVIDER'; payload: ServiceProvider }
+  | { type: 'REMOVE_SERVICE_PROVIDER'; payload: string }
+  | { type: 'UPDATE_SERVICE_PROVIDER'; payload: ServiceProvider }
+  | { type: 'ADD_SERVICE_REQUEST'; payload: ServiceRequest }
+  | { type: 'UPDATE_SERVICE_REQUEST'; payload: { id: string; status: ServiceRequest['status'] } };
 
 const defaultSettings: AppSettings = {
   appName: 'متجر العراق',
@@ -106,6 +122,10 @@ const defaultState: AppState = {
   ],
   searchQuery: '',
   appSettings: defaultSettings,
+  carListings: sampleCars,
+  propertyListings: sampleProperties,
+  serviceProviders: sampleServiceProviders,
+  serviceRequests: [],
 };
 
 function loadState(): AppState {
@@ -118,6 +138,10 @@ function loadState(): AppState {
         ...parsed,
         searchQuery: '',
         appSettings: { ...defaultSettings, ...(parsed.appSettings || {}) },
+        carListings: parsed.carListings?.length ? parsed.carListings : sampleCars,
+        propertyListings: parsed.propertyListings?.length ? parsed.propertyListings : sampleProperties,
+        serviceProviders: parsed.serviceProviders?.length ? parsed.serviceProviders : sampleServiceProviders,
+        serviceRequests: parsed.serviceRequests || [],
       };
     }
   } catch {
@@ -230,6 +254,28 @@ function appReducer(state: AppState, action: Action): AppState {
       return { ...state, orders: state.orders.map(o => o.id === action.payload ? { ...o, status: 'cancelled' } : o) };
     case 'DELETE_USER_ACCOUNT':
       return { ...state, user: null, isLoggedIn: false, isAdmin: false, cart: [], favorites: [], orders: [], addresses: [] };
+    case 'ADD_CAR_LISTING':
+      return { ...state, carListings: [action.payload, ...state.carListings] };
+    case 'REMOVE_CAR_LISTING':
+      return { ...state, carListings: state.carListings.filter(c => c.id !== action.payload) };
+    case 'UPDATE_CAR_LISTING':
+      return { ...state, carListings: state.carListings.map(c => c.id === action.payload.id ? action.payload : c) };
+    case 'ADD_PROPERTY_LISTING':
+      return { ...state, propertyListings: [action.payload, ...state.propertyListings] };
+    case 'REMOVE_PROPERTY_LISTING':
+      return { ...state, propertyListings: state.propertyListings.filter(p => p.id !== action.payload) };
+    case 'UPDATE_PROPERTY_LISTING':
+      return { ...state, propertyListings: state.propertyListings.map(p => p.id === action.payload.id ? action.payload : p) };
+    case 'ADD_SERVICE_PROVIDER':
+      return { ...state, serviceProviders: [action.payload, ...state.serviceProviders] };
+    case 'REMOVE_SERVICE_PROVIDER':
+      return { ...state, serviceProviders: state.serviceProviders.filter(s => s.id !== action.payload) };
+    case 'UPDATE_SERVICE_PROVIDER':
+      return { ...state, serviceProviders: state.serviceProviders.map(s => s.id === action.payload.id ? action.payload : s) };
+    case 'ADD_SERVICE_REQUEST':
+      return { ...state, serviceRequests: [action.payload, ...state.serviceRequests] };
+    case 'UPDATE_SERVICE_REQUEST':
+      return { ...state, serviceRequests: state.serviceRequests.map(r => r.id === action.payload.id ? { ...r, status: action.payload.status } : r) };
     default:
       return state;
   }
