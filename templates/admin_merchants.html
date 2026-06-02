@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}إدارة التجار - Ishtar Portal{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="page-header">
+        <h1><i class="bi bi-shop"></i> إدارة التجار</h1>
+    </div>
+
+    <!-- Search & Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-8">
+                    <input type="text" class="form-control" name="search" placeholder="ابحث باسم المتجر أو رقم الهاتف..." value="{{ search }}">
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" name="verified">
+                        <option value="">الكل</option>
+                        <option value="true" {% if verified == 'true' %}selected{% endif %}>معتمد</option>
+                        <option value="false" {% if verified == 'false' %}selected{% endif %}>قيد التحقق</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-search"></i> بحث
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Merchants Table -->
+    <div class="card">
+        <div class="card-body">
+            {% if merchants.items %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>اسم المتجر</th>
+                                <th>صاحب المتجر</th>
+                                <th>الفئة</th>
+                                <th>المبيعات</th>
+                                <th>التقييم</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for merchant in merchants.items %}
+                                <tr>
+                                    <td>{{ merchant.store_name }}</td>
+                                    <td>{{ merchant.user.name }}</td>
+                                    <td>{{ merchant.store_category or '-' }}</td>
+                                    <td>{{ "%.2f"|format(merchant.total_sales) }} IQD</td>
+                                    <td><span class="badge badge-info">{{ "%.1f"|format(merchant.rating) }}/5</span></td>
+                                    <td>
+                                        {% if merchant.verified %}
+                                            <span class="badge badge-success">معتمد</span>
+                                        {% else %}
+                                            <span class="badge badge-warning">قيد التحقق</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if not merchant.verified %}
+                                            <form method="POST" action="{{ url_for('admin_verify_merchant', merchant_id=merchant.id) }}" style="display: inline;">
+                                                <button type="submit" class="btn btn-success btn-sm">
+                                                    <i class="bi bi-check-circle"></i> تحقق
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if merchants.has_prev %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('admin_merchants', page=merchants.prev_num, search=search, verified=verified) }}">السابق</a>
+                            </li>
+                        {% endif %}
+                        {% for page_num in merchants.iter_pages() %}
+                            {% if page_num %}
+                                {% if page_num == merchants.page %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ page_num }}</span>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ url_for('admin_merchants', page=page_num, search=search, verified=verified) }}">{{ page_num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if merchants.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('admin_merchants', page=merchants.next_num, search=search, verified=verified) }}">التالي</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% else %}
+                <p class="text-muted text-center">لا توجد متاجر</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

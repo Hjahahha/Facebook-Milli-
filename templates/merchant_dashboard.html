@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block title %}لوحة تحكم التاجر - Ishtar Portal{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="page-header">
+        <h1><i class="bi bi-shop"></i> لوحة تحكم المتجر</h1>
+        <p class="text-muted">{{ merchant.store_name }}</p>
+    </div>
+
+    <!-- Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6>المنتجات</h6>
+                <h3>{{ total_products }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6>إجمالي الطلبات</h6>
+                <h3>{{ total_orders }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6>الطلبات المكتملة</h6>
+                <h3>{{ completed_orders }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6>إجمالي الإيرادات</h6>
+                <h3>{{ "%.0f"|format(total_revenue) }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Store Info -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0"><i class="bi bi-info-circle"></i> معلومات المتجر</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>اسم المتجر:</strong> {{ merchant.store_name }}</p>
+                    <p><strong>الفئة:</strong> {{ merchant.store_category or 'غير محدد' }}</p>
+                    <p><strong>التقييم:</strong> <span class="badge badge-info">{{ "%.1f"|format(merchant.rating) }}/5</span></p>
+                    <p><strong>الحالة:</strong>
+                        {% if merchant.verified %}
+                            <span class="badge badge-success">معتمد</span>
+                        {% else %}
+                            <span class="badge badge-warning">قيد التحقق</span>
+                        {% endif %}
+                    </p>
+                    <a href="{{ url_for('merchant_settings') }}" class="btn btn-primary mt-3">
+                        <i class="bi bi-gear"></i> تحديث الإعدادات
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0"><i class="bi bi-lightning"></i> إجراءات سريعة</h5>
+                </div>
+                <div class="card-body">
+                    <a href="{{ url_for('merchant_products') }}" class="btn btn-primary w-100 mb-2">
+                        <i class="bi bi-plus-circle"></i> إضافة منتج جديد
+                    </a>
+                    <a href="{{ url_for('merchant_products') }}" class="btn btn-outline-primary w-100 mb-2">
+                        <i class="bi bi-box"></i> إدارة المنتجات
+                    </a>
+                    <a href="{{ url_for('merchant_settings') }}" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-gear"></i> إعدادات البنك
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="card mb-4">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0"><i class="bi bi-bag"></i> الطلبات الأخيرة</h5>
+        </div>
+        <div class="card-body">
+            {% if recent_orders %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>رقم الطلب</th>
+                                <th>المنتج</th>
+                                <th>الكمية</th>
+                                <th>السعر</th>
+                                <th>الحالة</th>
+                                <th>التاريخ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in recent_orders %}
+                                <tr>
+                                    <td>#{{ order.id }}</td>
+                                    <td>{{ order.product.name }}</td>
+                                    <td>{{ order.quantity }}</td>
+                                    <td>{{ "%.2f"|format(order.total_price) }} IQD</td>
+                                    <td>
+                                        {% if order.status == 'completed' %}
+                                            <span class="badge badge-success">مكتمل</span>
+                                        {% elif order.status == 'pending' %}
+                                            <span class="badge badge-warning">قيد الانتظار</span>
+                                        {% else %}
+                                            <span class="badge badge-danger">ملغى</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ order.created_at.strftime('%d/%m/%Y') }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted text-center">لا توجد طلبات</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="card">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0"><i class="bi bi-arrow-left-right"></i> المعاملات المالية</h5>
+        </div>
+        <div class="card-body">
+            {% if transactions %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>النوع</th>
+                                <th>المبلغ</th>
+                                <th>العملة</th>
+                                <th>الحالة</th>
+                                <th>التاريخ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions %}
+                                <tr>
+                                    <td>{{ transaction.type }}</td>
+                                    <td>{{ "%.2f"|format(transaction.amount) }}</td>
+                                    <td>{{ transaction.currency }}</td>
+                                    <td>
+                                        {% if transaction.status == 'completed' %}
+                                            <span class="badge badge-success">مكتمل</span>
+                                        {% else %}
+                                            <span class="badge badge-warning">قيد الانتظار</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ transaction.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted text-center">لا توجد معاملات</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

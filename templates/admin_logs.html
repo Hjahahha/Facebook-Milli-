@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}ا��سجلات - Ishtar Portal{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="page-header">
+        <h1><i class="bi bi-clock-history"></i> سجل الإجراءات الإدارية</h1>
+    </div>
+
+    <!-- Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-10">
+                    <input type="text" class="form-control" name="action" placeholder="ابحث بنوع الإجراء..." value="{{ action }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-search"></i> بحث
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Logs Table -->
+    <div class="card">
+        <div class="card-body">
+            {% if logs.items %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>المسؤول</th>
+                                <th>الإجراء</th>
+                                <th>نوع الهدف</th>
+                                <th>معرّف الهدف</th>
+                                <th>التفاصيل</th>
+                                <th>التاريخ والوقت</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in logs.items %}
+                                <tr>
+                                    <td>{{ log.admin_id }}</td>
+                                    <td><strong>{{ log.action }}</strong></td>
+                                    <td>{{ log.target_type or '-' }}</td>
+                                    <td>{{ log.target_id or '-' }}</td>
+                                    <td><small>{{ log.details }}</small></td>
+                                    <td>{{ log.created_at.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if logs.has_prev %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('admin_logs', page=logs.prev_num, action=action) }}">السابق</a>
+                            </li>
+                        {% endif %}
+                        {% for page_num in logs.iter_pages() %}
+                            {% if page_num %}
+                                {% if page_num == logs.page %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ page_num }}</span>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ url_for('admin_logs', page=page_num, action=action) }}">{{ page_num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if logs.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('admin_logs', page=logs.next_num, action=action) }}">التالي</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% else %}
+                <p class="text-muted text-center">لا توجد سجلات</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

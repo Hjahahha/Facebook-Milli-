@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}إعدادات المتجر - Ishtar Portal{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="page-header">
+        <h1><i class="bi bi-gear"></i> إعدادات المتجر</h1>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body p-4">
+                    <form method="POST">
+                        <h5 class="mb-4"><i class="bi bi-shop"></i> معلومات المتجر</h5>
+
+                        <div class="mb-3">
+                            <label for="store_name" class="form-label">اسم المتجر</label>
+                            <input type="text" class="form-control" id="store_name" name="store_name" value="{{ merchant.store_name }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="store_category" class="form-label">فئة المتجر</label>
+                            <select class="form-select" id="store_category" name="store_category">
+                                <option value="" selected>اختر فئة</option>
+                                <option value="electronics" {% if merchant.store_category == 'electronics' %}selected{% endif %}>إلكترونيات</option>
+                                <option value="fashion" {% if merchant.store_category == 'fashion' %}selected{% endif %}>أزياء</option>
+                                <option value="food" {% if merchant.store_category == 'food' %}selected{% endif %}>غذاء وشراب</option>
+                                <option value="beauty" {% if merchant.store_category == 'beauty' %}selected{% endif %}>جمال والعناية</option>
+                                <option value="home" {% if merchant.store_category == 'home' %}selected{% endif %}>المنزل والحديقة</option>
+                                <option value="sports" {% if merchant.store_category == 'sports' %}selected{% endif %}>الرياضة</option>
+                                <option value="other" {% if merchant.store_category == 'other' %}selected{% endif %}>أخرى</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="store_description" class="form-label">وصف المتجر</label>
+                            <textarea class="form-control" id="store_description" name="store_description" rows="4">{{ merchant.store_description }}</textarea>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <h5 class="mb-4"><i class="bi bi-bank"></i> معلومات البنك</h5>
+
+                        <div class="mb-3">
+                            <label for="bank_account" class="form-label">رقم الحساب البنكي</label>
+                            <input type="text" class="form-control" id="bank_account" name="bank_account" value="{{ merchant.bank_account }}" placeholder="IBAN أو رقم الحساب">
+                        </div>
+
+                        <div class="alert alert-info" role="alert">
+                            <i class="bi bi-info-circle"></i> 
+                            <strong>ملاحظة:</strong> سيتم استخدام معلومات البنك لتحويل أرباحك. تأكد من صحة البيانات.
+                        </div>
+
+                        <hr class="my-4">
+
+                        <h5 class="mb-4"><i class="bi bi-bar-chart"></i> إحصائيات المتجر</h5>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3">
+                                <p><strong>إجمالي المبيعات:</strong> {{ "%.2f"|format(merchant.total_sales) }} IQD</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <p><strong>إجمالي الأرباح:</strong> {{ "%.2f"|format(merchant.total_earnings) }} IQD</p>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3">
+                                <p><strong>التقييم:</strong> <span class="badge badge-info">{{ "%.1f"|format(merchant.rating) }}/5</span></p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <p><strong>الحالة:</strong>
+                                    {% if merchant.verified %}
+                                        <span class="badge badge-success">معتمد</span>
+                                    {% else %}
+                                        <span class="badge badge-warning">قيد التحقق</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> حفظ التغييرات
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

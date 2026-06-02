@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}المعاملات المالية - Ishtar Portal{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="page-header">
+        <h1><i class="bi bi-arrow-left-right"></i> المعاملات المالية</h1>
+    </div>
+
+    <!-- Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-10">
+                    <select class="form-select" name="status">
+                        <option value="">جميع الحالات</option>
+                        <option value="completed" {% if status == 'completed' %}selected{% endif %}>مكتمل</option>
+                        <option value="pending" {% if status == 'pending' %}selected{% endif %}>قيد الانتظار</option>
+                        <option value="failed" {% if status == 'failed' %}selected{% endif %}>فشل</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-funnel"></i> تصفية
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Transactions Table -->
+    <div class="card">
+        <div class="card-body">
+            {% if transactions.items %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>رقم المعاملة</th>
+                                <th>المستخدم</th>
+                                <th>النوع</th>
+                                <th>المبلغ</th>
+                                <th>العملة</th>
+                                <th>الحالة</th>
+                                <th>الوصف</th>
+                                <th>التاريخ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions.items %}
+                                <tr>
+                                    <td>#{{ transaction.id }}</td>
+                                    <td>{{ transaction.user.name }}</td>
+                                    <td>{{ transaction.type }}</td>
+                                    <td>{{ "%.2f"|format(transaction.amount) }}</td>
+                                    <td>{{ transaction.currency }}</td>
+                                    <td>
+                                        {% if transaction.status == 'completed' %}
+                                            <span class="badge badge-success">مكتمل</span>
+                                        {% elif transaction.status == 'pending' %}
+                                            <span class="badge badge-warning">قيد الانتظار</span>
+                                        {% else %}
+                                            <span class="badge badge-danger">فشل</span>
+                                        {% endif %}
+                                    </td>
+                                    <td><small>{{ transaction.description }}</small></td>
+                                    <td>{{ transaction.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if transactions.has_prev %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('admin_transactions', page=transactions.prev_num, status=status) }}">السابق</a>
+                            </li>
+                        {% endif %}
+                        {% for page_num in transactions.iter_pages() %}
+                            {% if page_num %}
+                                {% if page_num == transactions.page %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ page_num }}</span>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ url_for('admin_transactions', page=page_num, status=status) }}">{{ page_num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if transactions.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('admin_transactions', page=transactions.next_num, status=status) }}">التالي</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% else %}
+                <p class="text-muted text-center">لا توجد معاملات</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

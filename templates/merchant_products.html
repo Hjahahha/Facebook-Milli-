@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}المنتجات - Ishtar Portal{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="page-header">
+        <h1><i class="bi bi-box"></i> إدارة المنتجات</h1>
+    </div>
+
+    <!-- Add Product Form -->
+    <div class="card mb-4">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0"><i class="bi bi-plus-circle"></i> إضافة منتج جديد</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('merchant_products') }}">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label">اسم المنتج</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="category" class="form-label">الفئة</label>
+                        <input type="text" class="form-control" id="category" name="category">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">الوصف</label>
+                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="price" class="form-label">السعر (IQD)</label>
+                        <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="quantity" class="form-label">الكمية المتاحة</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-check-circle"></i> إضافة المنتج
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Products List -->
+    <div class="card">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0"><i class="bi bi-list-check"></i> قائمة المنتجات</h5>
+        </div>
+        <div class="card-body">
+            {% if products %}
+                <div class="row">
+                    {% for product in products %}
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ product.name }}</h5>
+                                    <p class="card-text text-muted">{{ product.description[:100] }}...</p>
+                                    <p class="mb-2">
+                                        <strong>السعر:</strong> {{ "%.2f"|format(product.price) }} IQD
+                                    </p>
+                                    <p class="mb-2">
+                                        <strong>الكمية:</strong> {{ product.quantity }}
+                                    </p>
+                                    <p class="mb-3">
+                                        {% if product.status == 'active' %}
+                                            <span class="badge badge-success">نشط</span>
+                                        {% else %}
+                                            <span class="badge badge-secondary">غير نشط</span>
+                                        {% endif %}
+                                    </p>
+                                    <a href="{{ url_for('merchant_edit_product', product_id=product.id) }}" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-pencil"></i> تعديل
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted text-center">لا توجد منتجات. ابدأ بإضافة منتج جديد!</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

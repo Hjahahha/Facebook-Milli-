@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %}لوحة التحكم - Ishtar Portal{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="page-header">
+        <h1><i class="bi bi-speedometer2"></i> لوحة التحكم</h1>
+        <p class="text-muted">أهلا وسهلا، {{ current_user.name }}</p>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6>الرصيد (IQD)</h6>
+                <h3>{{ "%.0f"|format(current_user.balance_iqd) }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6>الرصيد (USD)</h6>
+                <h3>{{ "%.0f"|format(current_user.balance_usd) }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6>إجمالي الإنفاق</h6>
+                <h3>{{ "%.0f"|format(total_spent) }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6>عدد الطلبات</h6>
+                <h3>{{ orders|length }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="card mb-4">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0"><i class="bi bi-bag"></i> الطلبات الأخيرة</h5>
+        </div>
+        <div class="card-body">
+            {% if orders %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>رقم الطلب</th>
+                                <th>المنتج</th>
+                                <th>الكمية</th>
+                                <th>السعر</th>
+                                <th>الحالة</th>
+                                <th>التاريخ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                                <tr>
+                                    <td>#{{ order.id }}</td>
+                                    <td>{{ order.product.name }}</td>
+                                    <td>{{ order.quantity }}</td>
+                                    <td>{{ "%.2f"|format(order.total_price) }} IQD</td>
+                                    <td>
+                                        {% if order.status == 'completed' %}
+                                            <span class="badge badge-success">مكتمل</span>
+                                        {% elif order.status == 'pending' %}
+                                            <span class="badge badge-warning">قيد الانتظار</span>
+                                        {% else %}
+                                            <span class="badge badge-danger">ملغى</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ order.created_at.strftime('%d/%m/%Y') }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted text-center">لا توجد طلبات</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="card">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0"><i class="bi bi-arrow-left-right"></i> المعاملات المالية</h5>
+        </div>
+        <div class="card-body">
+            {% if transactions %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>النوع</th>
+                                <th>المبلغ</th>
+                                <th>العملة</th>
+                                <th>الحالة</th>
+                                <th>الوصف</th>
+                                <th>التاريخ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions %}
+                                <tr>
+                                    <td>{{ transaction.type }}</td>
+                                    <td>{{ "%.2f"|format(transaction.amount) }}</td>
+                                    <td>{{ transaction.currency }}</td>
+                                    <td>
+                                        {% if transaction.status == 'completed' %}
+                                            <span class="badge badge-success">مكتمل</span>
+                                        {% elif transaction.status == 'pending' %}
+                                            <span class="badge badge-warning">قيد الانتظار</span>
+                                        {% else %}
+                                            <span class="badge badge-danger">فشل</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ transaction.description }}</td>
+                                    <td>{{ transaction.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted text-center">لا توجد معاملات</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

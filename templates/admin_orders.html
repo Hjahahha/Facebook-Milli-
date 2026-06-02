@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}إدارة الطلبات - Ishtar Portal{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="page-header">
+        <h1><i class="bi bi-bag"></i> إدارة الطلبات</h1>
+    </div>
+
+    <!-- Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-10">
+                    <select class="form-select" name="status">
+                        <option value="">جميع الحالات</option>
+                        <option value="pending" {% if status == 'pending' %}selected{% endif %}>قيد الانتظار</option>
+                        <option value="completed" {% if status == 'completed' %}selected{% endif %}>مكتمل</option>
+                        <option value="cancelled" {% if status == 'cancelled' %}selected{% endif %}>ملغى</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-funnel"></i> تصفية
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="card">
+        <div class="card-body">
+            {% if orders.items %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>رقم الطلب</th>
+                                <th>المشتري</th>
+                                <th>المنتج</th>
+                                <th>الكمية</th>
+                                <th>المبلغ</th>
+                                <th>الحالة</th>
+                                <th>التاريخ</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders.items %}
+                                <tr>
+                                    <td>#{{ order.id }}</td>
+                                    <td>{{ order.product.seller.name }}</td>
+                                    <td>{{ order.product.name }}</td>
+                                    <td>{{ order.quantity }}</td>
+                                    <td>{{ "%.2f"|format(order.total_price) }} IQD</td>
+                                    <td>
+                                        {% if order.status == 'completed' %}
+                                            <span class="badge badge-success">مكتمل</span>
+                                        {% elif order.status == 'pending' %}
+                                            <span class="badge badge-warning">قيد الانتظار</span>
+                                        {% else %}
+                                            <span class="badge badge-danger">ملغى</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ order.created_at.strftime('%d/%m/%Y') }}</td>
+                                    <td>
+                                        <form method="POST" action="{{ url_for('admin_update_order', order_id=order.id) }}" style="display: inline;">
+                                            <select name="status" class="form-select form-select-sm" style="width: auto;">
+                                                <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>قيد الانتظار</option>
+                                                <option value="completed" {% if order.status == 'completed' %}selected{% endif %}>مكتمل</option>
+                                                <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>ملغى</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-primary btn-sm mt-1">
+                                                <i class="bi bi-save"></i> حفظ
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if orders.has_prev %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('admin_orders', page=orders.prev_num, status=status) }}">السابق</a>
+                            </li>
+                        {% endif %}
+                        {% for page_num in orders.iter_pages() %}
+                            {% if page_num %}
+                                {% if page_num == orders.page %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ page_num }}</span>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ url_for('admin_orders', page=page_num, status=status) }}">{{ page_num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if orders.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('admin_orders', page=orders.next_num, status=status) }}">التالي</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% else %}
+                <p class="text-muted text-center">لا توجد طلبات</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
