@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "Todo App",
+    "slug": "mobile-todo-app",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true",
+      "bundleIdentifier": "com.hjahahha.todoapp"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.hjahahha.todoapp"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "@react-native-async-storage/async-storage",
+        {
+          "NSDocumentUsageDescription": "Allow app to save your todos"
+        }
+      ]
+    ]
+  }
+}
