@@ -8,8 +8,9 @@ import {
   TextInput,
   Modal,
   Alert,
+  SafeAreaView,
 } from 'react-native';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-community';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTodos } from '../hooks/useTodos';
 import { useTheme } from '../context/ThemeContext';
 import { Category } from '../types';
@@ -84,7 +85,7 @@ const CategoriesScreen: React.FC = () => {
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.bg }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.bg }]}>
       <FlatList
         data={categories}
         keyExtractor={(item) => item.id}
@@ -170,7 +171,7 @@ const CategoriesScreen: React.FC = () => {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 

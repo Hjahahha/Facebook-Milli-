@@ -6,40 +6,49 @@ import { v4 as uuidv4 } from 'uuid';
 const TODOS_KEY = '@todos_storage';
 const CATEGORIES_KEY = '@categories_storage';
 
+const DEFAULT_CATEGORIES: Category[] = [
+  { id: uuidv4(), name: 'Work', color: '#6366f1' },
+  { id: uuidv4(), name: 'Personal', color: '#ec4899' },
+  { id: uuidv4(), name: 'Shopping', color: '#f59e0b' },
+  { id: uuidv4(), name: 'Health', color: '#10b981' },
+];
+
 export const useTodos = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>(DEFAULT_CATEGORIES);
   const [loading, setLoading] = useState(true);
 
   // Load todos and categories from AsyncStorage
-  const loadTodos = useCallback(async () => {
-    try {
-      const [todosData, categoriesData] = await Promise.all([
-        AsyncStorage.getItem(TODOS_KEY),
-        AsyncStorage.getItem(CATEGORIES_KEY),
-      ]);
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        const [todosJson, categoriesJson] = await Promise.all([
+          AsyncStorage.getItem(TODOS_KEY),
+          AsyncStorage.getItem(CATEGORIES_KEY),
+        ]);
 
-      if (todosData) setTodos(JSON.parse(todosData));
-      if (categoriesData) setCategories(JSON.parse(categoriesData));
-      else {
-        // Initialize with default categories
-        const defaultCategories: Category[] = [
-          { id: uuidv4(), name: 'Work', color: '#6366f1' },
-          { id: uuidv4(), name: 'Personal', color: '#ec4899' },
-          { id: uuidv4(), name: 'Shopping', color: '#f59e0b' },
-          { id: uuidv4(), name: 'Health', color: '#10b981' },
-        ];
-        setCategories(defaultCategories);
-        await AsyncStorage.setItem(
-          CATEGORIES_KEY,
-          JSON.stringify(defaultCategories)
-        );
+        if (todosJson) {
+          setTodos(JSON.parse(todosJson));
+        }
+        if (categoriesJson) {
+          setCategories(JSON.parse(categoriesJson));
+        } else {
+          // Initialize with default categories
+          await AsyncStorage.setItem(
+            CATEGORIES_KEY,
+            JSON.stringify(DEFAULT_CATEGORIES)
+          );
+          setCategories(DEFAULT_CATEGORIES);
+        }
+      } catch (error) {
+        console.error('Error loading data:', error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Error loading todos:', error);
-    } finally {
-      setLoading(false);
-    }
+    };
+
+    loadData();
   }, []);
 
   // Save todos to AsyncStorage
@@ -52,9 +61,24 @@ export const useTodos = () => {
     }
   }, []);
 
+  // Save categories to AsyncStorage
+  const saveCategories = useCallback(async (newCategories: Category[]) => {
+    try {
+      await AsyncStorage.setItem(CATEGORIES_KEY, JSON.stringify(newCategories));
+      setCategories(newCategories);
+    } catch (error) {
+      console.error('Error saving categories:', error);
+    }
+  }, []);
+
   // Add new todo
   const addTodo = useCallback(
-    (title: string, categoryId?: string, dueDate?: Date, priority?: 'low' | 'medium' | 'high') => {
+    (
+      title: string,
+      categoryId?: string,
+      dueDate?: Date,
+      priority?: 'low' | 'medium' | 'high'
+    ) => {
       const newTodo: Todo = {
         id: uuidv4(),
         title,
@@ -110,25 +134,23 @@ export const useTodos = () => {
         color,
       };
       const updated = [...categories, newCategory];
-      AsyncStorage.setItem(CATEGORIES_KEY, JSON.stringify(updated));
-      setCategories(updated);
+      saveCategories(updated);
     },
-    [categories]
+    [categories, saveCategories]
   );
 
   // Delete category
   const deleteCategory = useCallback(
     (id: string) => {
       const updated = categories.filter((cat) => cat.id !== id);
-      AsyncStorage.setItem(CATEGORIES_KEY, JSON.stringify(updated));
-      setCategories(updated);
+      saveCategories(updated);
       // Remove category from todos
       const updatedTodos = todos.map((todo) =>
         todo.categoryId === id ? { ...todo, categoryId: undefined } : todo
       );
       saveTodos(updatedTodos);
     },
-    [categories, todos, saveTodos]
+    [categories, todos, saveCategories, saveTodos]
   );
 
   // Clear all completed todos
@@ -136,14 +158,6 @@ export const useTodos = () => {
     const updated = todos.filter((todo) => !todo.completed);
     saveTodos(updated);
   }, [todos, saveTodos]);
-
-  // Get todos by category
-  const getTodosByCategory = useCallback(
-    (categoryId: string) => {
-      return todos.filter((todo) => todo.categoryId === categoryId);
-    },
-    [todos]
-  );
 
   // Get stats
   const stats = {
@@ -156,10 +170,6 @@ export const useTodos = () => {
     }).length,
   };
 
-  useEffect(() => {
-    loadTodos();
-  }, [loadTodos]);
-
   return {
     todos,
     categories,
@@ -171,7 +181,6 @@ export const useTodos = () => {
     addCategory,
     deleteCategory,
     clearCompleted,
-    getTodosByCategory,
     stats,
   };
 };

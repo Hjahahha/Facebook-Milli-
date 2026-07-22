@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   View,
   Text,
@@ -10,22 +10,26 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
 } from 'react-native';
-import MaterialCommunityIcons from '@react-native-vector-icons/material-community';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import DatePicker from 'react-native-date-picker';
 import { useTodos } from '../hooks/useTodos';
 import { useTheme } from '../context/ThemeContext';
 import TodoItem from '../components/TodoItem';
-import { Todo } from '../types';
+
+type FilterType = 'all' | 'active' | 'completed';
 
 const TodoScreen: React.FC = () => {
   const { todos, categories, addTodo, stats, loading } = useTodos();
   const { isDark } = useTheme();
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [filter, setFilter] = useState<FilterType>('all');
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
-  const [selectedPriority, setSelectedPriority] = useState<'low' | 'medium' | 'high'>('medium');
+  const [selectedPriority, setSelectedPriority] = useState<'low' | 'medium' | 'high'>(
+    'medium'
+  );
   const [dueDate, setDueDate] = useState<Date | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -37,11 +41,13 @@ const TodoScreen: React.FC = () => {
     border: isDark ? '#374151' : '#e5e7eb',
   };
 
-  const filteredTodos = todos.filter((todo) => {
-    if (filter === 'active') return !todo.completed;
-    if (filter === 'completed') return todo.completed;
-    return true;
-  });
+  const filteredTodos = useMemo(() => {
+    return todos.filter((todo) => {
+      if (filter === 'active') return !todo.completed;
+      if (filter === 'completed') return todo.completed;
+      return true;
+    });
+  }, [todos, filter]);
 
   const handleAddTodo = () => {
     if (title.trim()) {
@@ -54,14 +60,24 @@ const TodoScreen: React.FC = () => {
     }
   };
 
-  const priorityColors = {
+  const priorityColors: Record<string, string> = {
     low: '#10b981',
     medium: '#f59e0b',
     high: '#ef4444',
   };
 
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.container, { backgroundColor: theme.bg }]}>
+        <View style={styles.loadingContainer}>
+          <Text style={[styles.loadingText, { color: theme.text }]}>Loading...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
-    <View style={[styles.container, { backgroundColor: theme.bg }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.bg }]}>
       {/* Stats */}
       <View style={[styles.statsContainer, { backgroundColor: theme.card }]}>
         <View style={styles.statItem}>
@@ -122,10 +138,7 @@ const TodoScreen: React.FC = () => {
       />
 
       {/* Add Button */}
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => setShowModal(true)}
-      >
+      <TouchableOpacity style={styles.fab} onPress={() => setShowModal(true)}>
         <MaterialCommunityIcons name="plus" size={28} color="#ffffff" />
       </TouchableOpacity>
 
@@ -274,7 +287,7 @@ const TodoScreen: React.FC = () => {
         confirmText="Confirm"
         cancelText="Cancel"
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -282,12 +295,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 16,
+  },
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingVertical: 16,
     marginHorizontal: 12,
     marginTop: 8,
+    marginBottom: 8,
     borderRadius: 12,
   },
   statItem: {

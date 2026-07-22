@@ -3,11 +3,12 @@
     "name": "Todo App",
     "slug": "mobile-todo-app",
     "version": "1.0.0",
+    "scheme": "myapp",
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true",
+      "supportsTablet": true,
       "bundleIdentifier": "com.hjahahha.todoapp"
     },
     "android": {
