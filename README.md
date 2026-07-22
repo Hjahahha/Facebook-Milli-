@@ -1,477 +1,172 @@
-# Ishtar Portal - منصة بيع عراقية متطورة
+# Mobile Todo App
 
-## 📌 نظرة عامة
+A fully-featured React Native todo list application with local storage persistence.
 
-تطبيق ويب شامل وحديث مبني بلغة Python باستخدام Flask، يوفر منصة متكاملة للتجارة الإلكترونية مع دعم العربية بالكامل. يجمع التطبيق بين ميزات متقدمة لثلاث فئات من المستخدمين:
+## Features
 
-1. **العملاء** - شراء المنتجات وتتبع الطلبات
-2. **التجار** - إدارة المتاجر والمنتجات والطلبات
-3. **الإدارة** - إدارة النظام الكامل والمستخدمين
+✅ **Task Management**
+- Add, edit, delete tasks
+- Mark tasks as complete/incomplete
+- View all, active, and completed tasks
+- Priority levels (Low, Medium, High)
+- Due dates with overdue warnings
+- Task categories with custom colors
 
----
+✅ **Local Storage**
+- All data saved to device via AsyncStorage
+- Persistent across app sessions
+- Automatic sync
 
-## ✨ الميزات الرئيسية
+✅ **Categories**
+- Pre-built categories (Work, Personal, Shopping, Health)
+- Create custom categories
+- Assign tasks to categories
+- Color-coded for easy identification
 
-### 🔐 نظام الأمان المتقدم
-- تشفير كلمات المرور باستخدام Bcrypt
-- التحقق من صحة المدخلات على جانب الخادم
-- حماية ضد هجمات SQL Injection
-- نظام تسجيل الدخول آمن مع جلسات المستخدم
-- متطلبات أدوار مخصصة (Admin, Merchant, Customer)
+✅ **UI/UX**
+- Dark/Light theme toggle
+- Responsive mobile design
+- Bottom tab navigation
+- Smooth animations
+- Statistics dashboard
 
-### 👨‍💼 لوحة تحكم العملاء
-- عرض الرصيد (IQD و USD)
-- تتبع الطلبات الحالية والسابقة
-- سجل المعاملات المالية الكاملة
-- واجهة بسيطة وسهلة الاستخدام
+✅ **Settings**
+- Theme preferences
+- Clear completed tasks
+- View task statistics
+- Clear all data option
 
-### 🏪 لوحة تحكم التجار
-- **إدارة المتاجر**
-  - تحديث معلومات المتجر
-  - إدارة فئات المنتجات
-  - تحديث تفاصيل الحساب البنكي
-  
-- **إدارة المنتجات**
-  - إضافة منتجات جديدة
-  - تعديل الأسعار والكميات
-  - تحديث الأوصاف والفئات
-  - تفعيل/تعطيل المنتجات
-  
-- **تتبع المبيعات**
-  - عرض إحصائيات المبيعات
-  - تتبع الطلبات الواردة
-  - حساب الأرباح والعمولات
-  - سجل المعاملات المالية
+## Tech Stack
 
-### 🛡️ لوحة تحكم الإدارة
-- **إدارة المستخدمين**
-  - بحث متقدم وتصفية
-  - تعديل بيانات المستخدمين
-  - إدارة الأدوار والصلاحيات
-  - تفعيل/تعطيل الحسابات
-  
-- **إدارة التجار**
-  - مراجعة طلبات التجار الجدد
-  - التحقق من بيانات التجار
-  - مراقبة أداء المتاجر
-  - عرض تقييمات التجار
-  
-- **إدارة الطلبات**
-  - عرض جميع الطلبات
-  - تحديث حالات الطلبات
-  - تصفية حسب الحالة
-  - تتبع المعاملات
-  
-- **المعاملات المالية**
-  - مراقبة جميع التحويلات المالية
-  - تتبع حالة المعاملات
-  - تقارير مالية شاملة
-  
-- **سجل الإجراءات**
-  - تسجيل جميع إجراءات الإدارة
-  - بحث وتصفية السجلات
-  - معلومات تفصيلية عن كل إجراء
-  - تتبع مسؤول الإجراء والوقت
+- **React Native** - Cross-platform mobile development
+- **Expo** - Development and distribution platform
+- **TypeScript** - Type safety
+- **AsyncStorage** - Local data persistence
+- **React Navigation** - Tab-based navigation
+- **React Native Vector Icons** - UI icons
 
----
+## Installation
 
-## 🗄️ قاعدة البيانات
+### Prerequisites
+- Node.js (v14+)
+- Expo CLI: `npm install -g expo-cli`
+- Mobile device or emulator
 
-### جداول البيانات الرئيسية
+### Setup
 
-#### 1. جدول المستخدمين (User)
-```
-- id: معرف فريد
-- name: اسم المستخدم
-- phone: رقم الهاتف (فريد)
-- email: البريد الإلكتروني (فريد)
-- password: كلمة المرور المشفرة
-- role: نوع الحساب (customer/merchant/admin)
-- balance_iqd: الرصيد بالدينار العراقي
-- balance_usd: الرصيد بالدولار
-- is_active: حالة الحساب
-- created_at: تاريخ الإنشاء
-```
+1. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-#### 2. جدول بيانات التاجر (MerchantProfile)
-```
-- id: معرف فريد
-- user_id: معرف المستخدم (فريد)
-- store_name: اسم المتجر
-- store_description: وصف المتجر
-- store_category: فئة المتجر
-- commission_rate: نسبة العمولة
-- total_sales: إجمالي المبيعات
-- total_earnings: إجمالي الأرباح
-- rating: تقييم المتجر
-- verified: حالة التحقق
-- bank_account: رقم الحساب البنكي
-- created_at: تاريخ الإنشاء
-```
+2. **Start development server**
+   ```bash
+   npm start
+   ```
 
-#### 3. جدول المنتجات (Product)
-```
-- id: معرف فريد
-- seller_id: معرف البائع
-- name: اسم المنتج
-- description: وصف المنتج
-- price: السعر
-- quantity: الكمية المتاحة
-- category: الفئة
-- status: حالة المنتج (active/inactive/archived)
-- created_at: تاريخ الإنشاء
-```
+## Running on Device
 
-#### 4. جدول الطلبات (Order)
-```
-- id: معرف فريد
-- buyer_id: معرف المشتري
-- product_id: معرف المنتج
-- quantity: الكمية المطلوبة
-- total_price: السعر الإجمالي
-- status: حالة الطلب (pending/completed/cancelled)
-- created_at: تاريخ الطلب
-```
+### Via Expo Go (Easiest)
+1. Download **Expo Go** app on your phone
+2. Scan the QR code from the terminal
+3. App loads instantly
 
-#### 5. جدول المعاملات (Transaction)
-```
-- id: معرف فريد
-- user_id: معرف المستخدم
-- type: نوع المعاملة (deposit/withdrawal/transfer/earning)
-- amount: المبلغ
-- currency: العملة (IQD/USD)
-- status: حالة المعاملة (pending/completed/failed)
-- description: الوصف
-- created_at: تاريخ المعاملة
-```
-
-#### 6. جدول سجل الإدارة (AdminLog)
-```
-- id: معرف فريد
-- admin_id: معرف الإداري
-- action: نوع الإجراء
-- target_type: نوع الهدف (user/merchant/product/order)
-- target_id: معرف الهدف
-- details: التفاصيل
-- created_at: تاريخ الإجراء
-```
-
----
-
-## 🚀 التثبيت والتشغيل
-
-### المتطلبات
-- Python 3.9+
-- pip (مدير الحزم)
-- SQLite3
-
-### خطوات التثبيت
-
-1. **استنساخ المشروع**
+### iOS
 ```bash
-git clone https://github.com/Hjahahha/Facebook-Milli-.git
-cd Facebook-Milli-
+npm run ios
 ```
 
-2. **إنشاء بيئة افتراضية**
+### Android
 ```bash
-python -m venv venv
+npm run android
 ```
 
-3. **تفعيل البيئة الافتراضية**
+## Building for Production
 
-**على Windows:**
+### Android APK
 ```bash
-venv\Scripts\activate
+npm run build:android
 ```
 
-**على macOS/Linux:**
+### iOS App
 ```bash
-source venv/bin/activate
+npm run build:ios
 ```
 
-4. **تثبيت المتطلبات**
-```bash
-pip install -r requirements.txt
-```
-
-5. **تعيين متغيرات البيئة**
-```bash
-# على Windows
-set FLASK_APP=app.py
-set FLASK_ENV=development
-set SECRET_KEY=your-secret-key-here
-
-# على macOS/Linux
-export FLASK_APP=app.py
-export FLASK_ENV=development
-export SECRET_KEY=your-secret-key-here
-```
-
-6. **تشغيل التطبيق**
-```bash
-python app.py
-```
-
-التطبيق سيكون متاحاً على: `http://localhost:5000`
-
----
-
-## 📝 تعليمات الاستخدام
-
-### إنشاء حساب جديد
-1. انقر على "التسجيل" في الصفحة الرئيسية
-2. اختر نوع الحساب (مشتري/تاجر)
-3. أدخل بيانات حسابك
-4. انقر على "إنشاء الحساب"
-
-### تسجيل الدخول
-1. انقر على "تسجيل الدخول"
-2. أدخل رقم الهاتف وكلمة المرور
-3. انقر على "تسجيل الدخول"
-
-### كعميل
-1. استعرض الطلبات من لوحة التحكم
-2. عرض سجل معاملاتك المالية
-3. تتبع الطلبات النشطة
-
-### كتاجر
-1. أضف منتجات جديدة من قسم المنتجات
-2. عدّل معلومات متجرك
-3. راقب الطلبات الواردة
-4. تحقق من إحصائيات المبيعات
-5. أضف تفاصيل حسابك البنكي
-
-### كمدير
-1. راقب جميع المستخدمين والتجار
-2. تحقق من طلبات التجار الجدد
-3. أدِر جميع الطلبات والمعاملات
-4. راجع سجل الإجراءات الإدارية
-
----
-
-## 🔄 مسارات API الرئيسية
-
-### المصادقة
-- `POST /login` - تسجيل الدخول
-- `POST /register` - إنشاء حساب جديد
-- `GET /logout` - تسجيل الخروج
-
-### العميل
-- `GET /dashboard` - لوحة التحكم
-
-### التاجر
-- `GET /merchant/dashboard` - لوحة التاجر
-- `GET /merchant/products` - قائمة المنتجات
-- `POST /merchant/products` - إضافة منتج
-- `POST /merchant/products/<id>/edit` - تعديل منتج
-- `GET /merchant/settings` - إعدادات المتجر
-- `POST /merchant/settings` - حفظ الإعدادات
-
-### الإدارة
-- `GET /admin/dashboard` - لوحة الإدارة
-- `GET /admin/users` - إدارة المستخدمين
-- `POST /admin/users/<id>/edit` - تعديل مستخدم
-- `GET /admin/merchants` - إدارة التجار
-- `POST /admin/merchants/<id>/verify` - التحقق من تاجر
-- `GET /admin/orders` - إدارة الطلبات
-- `POST /admin/orders/<id>/update` - تحديث طلب
-- `GET /admin/transactions` - المعاملات المالية
-- `GET /admin/logs` - سجل الإجراءات
-
----
-
-## 🔐 معايير الأمان
-
-✅ **تشفير كلمات المرور**
-- استخدام bcrypt لتشفير آمن
-- لا يتم حفظ كلمات المرور بصيغة نصية
-
-✅ **التحقق من الدخول**
-- جميع الصفحات الحساسة محمية بـ login_required
-- التحقق من الأدوار والصلاحيات
-
-✅ **التحقق من المدخلات**
-- فحص صحة البيانات على جانب الخادم
-- منع الحقول الفارغة
-- التحقق من صيغة البريد الإلكتروني والهاتف
-
-✅ **معالجة الأخطاء**
-- رسائل خطأ آمنة
-- تسجيل الأخطاء للتحقيق
-- صفحات خطأ مخصصة
-
-✅ **إدارة الجلسات**
-- تخزين آمن للبيانات
-- انقضاء الجلسات التلقائي
-- حماية ضد CSRF (في التحديثات المستقبلية)
-
----
-
-## 📊 الإحصائيات والتقارير
-
-### لوحة الإدارة تعرض:
-- إجمالي عدد المستخدمين
-- عدد التجار المسجلين
-- إجمالي المنتجات
-- إجمالي الطلبات
-- إجمالي الإيرادات
-- آخر الطلبات
-- سجل الإجراءات الإدارية
-
-### لوحة التاجر تعرض:
-- عدد المنتجات
-- إجمالي الطلبات
-- الطلبات المكتملة
-- إجمالي الإيرادات
-- تقييم المتجر
-- حالة التحقق
-
----
-
-## 🎨 تصميم الواجهة
-
-- **Bootstrap 5** - إطار عمل CSS حديث
-- **RTL Support** - دعم كامل للعربية من اليمين إلى اليسار
-- **Responsive Design** - متوافق مع جميع أحجام الشاشات
-- **Modern Icons** - أيقونات Bootstrap Icons
-- **Dark/Light Theme** - ألوان احترافية ومتناسقة
-
----
-
-## 📦 هيكل المشروع
+## Project Structure
 
 ```
-Facebook-Milli-/
-├── app.py                      # الملف الرئيسي للتطبيق
-├── requirements.txt             # المتطلبات
-├── README.md                    # هذا الملف
-├── templates/                   # ملفات HTML
-│   ├── base.html               # القالب الأساسي
-│   ├── login.html              # صفحة تسجيل الدخول
-│   ├── register.html           # صفحة التسجيل
-│   ├── customer_dashboard.html # لوحة العميل
-│   ├── merchant_dashboard.html # لوحة التاجر
-│   ├── merchant_products.html  # قائمة المنتجات
-│   ├── merchant_edit_product.html # تعديل المنتج
-│   ├── merchant_settings.html  # إعدادات المتجر
-│   ├── admin_dashboard.html    # لوحة الإدارة
-│   ├── admin_users.html        # إدارة المستخدمين
-│   ├── admin_edit_user.html    # تعديل المستخدم
-│   ├── admin_merchants.html    # إدارة التجار
-│   ├── admin_orders.html       # إدارة الطلبات
-│   ├── admin_transactions.html # المعاملات المالية
-│   ├── admin_logs.html         # سجل الإجراءات
-│   ├── 404.html                # صفحة خطأ 404
-│   ├── 500.html                # صفحة خطأ 500
-│   └── 403.html                # صفحة خطأ 403
-└── .github/
-    └── workflows/
-        └── python-package.yml   # سير العمل التلقائي
+src/
+├── components/
+│   └── TodoItem.tsx          # Individual todo item component
+├── screens/
+│   ├── TodoScreen.tsx         # Main tasks screen
+│   ├── CategoriesScreen.tsx   # Categories management
+│   └── SettingsScreen.tsx     # Settings & preferences
+├── hooks/
+│   └── useTodos.ts            # Custom hook for todo logic
+├── context/
+│   └── ThemeContext.tsx       # Dark/Light theme context
+└── types/
+    └── index.ts               # TypeScript interfaces
 ```
 
----
+## LocalStorage Keys
 
-## 🐛 معالجة الأخطاء
+- `@todos_storage` - All tasks
+- `@categories_storage` - Custom categories
+- `@theme_mode` - Theme preference (dark/light)
 
-التطبيق يتعامل مع الأخطاء التالية:
+## Features in Detail
 
-- **400** - طلب غير صحيح
-- **401** - عدم المصادقة (غير مسجل دخول)
-- **403** - الوصول مرفوض (صلاحيات غير كافية)
-- **404** - الصفحة غير موجودة
-- **500** - خطأ في الخادم
+### Task Priority
+- **Low** - Green (Non-urgent tasks)
+- **Medium** - Yellow (Standard priority)
+- **High** - Red (Urgent tasks)
 
----
+### Categories
+Default categories:
+- Work (Indigo)
+- Personal (Pink)
+- Shopping (Amber)
+- Health (Green)
 
-## 📚 التوثيق الإضافية
+Create custom categories with any name and color.
 
-### متغيرات البيئة المهمة
-```
-SECRET_KEY      - مفتاح سري لتشفير الجلسات
-FLASK_ENV       - بيئة التشغيل (development/production)
-DATABASE_URL    - رابط قاعدة البيانات
-PORT            - رقم المنفذ (افتراضي: 5000)
-```
+### Statistics
+Track your productivity:
+- Total tasks
+- Active tasks
+- Completed tasks
+- Overdue tasks
 
-### قيم الدور
-- `customer` - عميل عادي
-- `merchant` - تاجر
-- `admin` - مدير النظام
+## Usage Tips
 
-### حالات الطلب
-- `pending` - قيد الانتظار
-- `completed` - مكتمل
-- `cancelled` - ملغى
+1. **Quick Task** - Tap FAB to add a new task
+2. **Edit Task** - Tap pencil icon on any task
+3. **Complete Task** - Tap circle to mark done
+4. **Delete Task** - Tap trash icon
+5. **Filter View** - Use tabs to filter tasks
+6. **Dark Mode** - Toggle in Settings
+7. **Clear Data** - Use "Clear All Data" in Settings
 
-### حالة المنتج
-- `active` - نشط
-- `inactive` - غير نشط
-- `archived` - مؤرشف
+## Known Limitations
 
----
+- Data stored locally (not synced to cloud)
+- Single device per installation
+- No backup/restore feature (yet)
 
-## 🤝 المساهمة
+## Future Enhancements
 
-نرحب بالمساهمات! يمكنك:
-1. عمل Fork للمشروع
-2. إنشاء فرع جديد (`git checkout -b feature/amazing-feature`)
-3. Commit تغييراتك (`git commit -m 'Add amazing feature'`)
-4. Push إلى الفرع (`git push origin feature/amazing-feature`)
-5. فتح Pull Request
+- [ ] Cloud sync (Firebase)
+- [ ] Push notifications for due dates
+- [ ] Task notes/descriptions
+- [ ] Recurring tasks
+- [ ] Subtasks
+- [ ] Tags system
+- [ ] Export data (PDF/CSV)
+- [ ] Multi-language support
 
----
+## License
 
-## 📄 الترخيص
-
-هذا المشروع مرخص تحت رخصة MIT - انظر ملف LICENSE للتفاصيل.
-
----
-
-## 📞 التواصل والدعم
-
-إذا واجهت أي مشاكل أو لديك اقتراحات:
-- افتح [issue](https://github.com/Hjahahha/Facebook-Milli-/issues) جديد
-- تواصل عبر البريد الإلكتروني
-
----
-
-## 🎯 الخطط المستقبلية
-
-- [ ] إضافة نظام الدفع المتكامل
-- [ ] نظام التقييمات والمراجعات
-- [ ] نظام الإشعارات البريدية
-- [ ] تطبيق الهاتف المحمول
-- [ ] نظام القسائم والخصومات
-- [ ] لوحة تقارير متقدمة
-- [ ] نظام الشحن والتوصيل
-- [ ] دعم عملات متعددة
-
----
-
-## ✅ حالة المشروع
-
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
-![Status](https://img.shields.io/badge/status-Active-brightgreen)
-![Python](https://img.shields.io/badge/python-3.9+-blue)
-![Flask](https://img.shields.io/badge/flask-3.0+-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
-
----
-
-**تم التطوير بواسطة:** Hjahahha  
-**آخر تحديث:** 2 يونيو 2026  
-**الإصدار:** 1.0.0
-
----
-
-## 🙏 شكر خاص
-
-شكر لـ:
-- Flask وفريق التطوير
-- Bootstrap وفريق التصميم
-- المجتمع العراقي للمطورين
-
----
-
-> قُم ببناء شيء عظيم اليوم! 🚀
+MIT
